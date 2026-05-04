@@ -3,9 +3,13 @@ import { ThemeProvider, type Theme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+
+import { LocalizationProvider } from '../lib/localization';
+import { getAppPalette } from '../lib/theme-palette';
+import { useAssistantStore } from '../stores/assistant-store';
 
 import '../global.css';
 
@@ -21,36 +25,6 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-const navigationTheme: Theme = {
-  dark: true,
-  colors: {
-    primary: '#FFFFFF',
-    background: '#000000',
-    card: '#000000',
-    text: '#FFFFFF',
-    border: 'rgba(255,255,255,0.12)',
-    notification: '#FFFFFF',
-  },
-  fonts: {
-    regular: {
-      fontFamily: 'SpaceMono',
-      fontWeight: '400',
-    },
-    medium: {
-      fontFamily: 'SpaceMono',
-      fontWeight: '400',
-    },
-    bold: {
-      fontFamily: 'SpaceMono',
-      fontWeight: '400',
-    },
-    heavy: {
-      fontFamily: 'SpaceMono',
-      fontWeight: '400',
-    },
-  },
-};
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -77,17 +51,55 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const interfaceColor = useAssistantStore((state) => state.profile.interfaceColor);
+  const palette = getAppPalette(interfaceColor);
+
+  const navigationTheme = useMemo<Theme>(
+    () => ({
+      dark: true,
+      colors: {
+        primary: palette.primary,
+        background: palette.background,
+        card: palette.surface,
+        text: palette.textPrimary,
+        border: palette.border,
+        notification: palette.secondary,
+      },
+      fonts: {
+        regular: {
+          fontFamily: 'SpaceMono',
+          fontWeight: '400',
+        },
+        medium: {
+          fontFamily: 'SpaceMono',
+          fontWeight: '400',
+        },
+        bold: {
+          fontFamily: 'SpaceMono',
+          fontWeight: '400',
+        },
+        heavy: {
+          fontFamily: 'SpaceMono',
+          fontWeight: '400',
+        },
+      },
+    }),
+    [palette],
+  );
+
   return (
-    <ThemeProvider value={navigationTheme}>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: '#000000' },
-          animation: 'fade',
-        }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <LocalizationProvider>
+      <ThemeProvider value={navigationTheme}>
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: palette.background },
+            animation: 'fade',
+          }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 }

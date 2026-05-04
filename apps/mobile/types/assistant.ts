@@ -1,49 +1,52 @@
-export type ContentKind = 'text' | 'image' | 'video' | 'audio';
 export type ExperienceMode = 'fast' | 'expert';
 export type MessageRole = 'assistant' | 'user';
+export type SubscriptionPlan = 'free' | 'premium';
+export type DiscussionTone = 'balanced' | 'direct' | 'strategic';
+export type InterfaceColor = 'gold' | 'graphite' | 'violet';
 
 export interface Provider {
   id: string;
   name: string;
   vendor: string;
-  capability: ContentKind;
   summary: string;
-  latency: string;
+  free: boolean;
 }
 
 export interface ChatMessage {
   id: string;
   role: MessageRole;
   content: string;
-  timestamp: string;
+  createdAt: string;
   providerId?: string;
 }
 
-export interface GenerationModule {
-  id: string;
-  label: string;
-  description: string;
-  kind: ContentKind;
-  providerId: string;
-  status: 'ready' | 'queued' | 'active';
-}
-
-export interface LibraryItem {
+export interface ConversationSummary {
   id: string;
   title: string;
-  summary: string;
-  kind: ContentKind;
-  folder: string;
-  providerId: string;
-  status: 'ready' | 'queued' | 'draft';
+  preview: string;
   updatedAt: string;
+  archived: boolean;
 }
 
-export interface AssistantPreferences {
-  memory: boolean;
-  streaming: boolean;
-  semanticSearch: boolean;
-  voice: boolean;
+export interface AccountProfile {
+  email: string;
+  alias: string;
+  tone: DiscussionTone;
+  interfaceColor: InterfaceColor;
+}
+
+export interface NotificationSettings {
+  product: boolean;
+  billing: boolean;
+  security: boolean;
+}
+
+export interface SessionDevice {
+  id: string;
+  label: string;
+  location: string;
+  lastActiveAt: string;
+  current: boolean;
 }
 
 export interface ChatRequestInput {
@@ -56,21 +59,4 @@ export interface ChatRequestInput {
 export interface ChatReply {
   content: string;
   providerLabel: string;
-}
-
-export interface GenerationRequestInput {
-  prompt: string;
-  kind: ContentKind;
-  providerId: string;
-  style: string;
-}
-
-export interface GenerationResult {
-  id: string;
-  title: string;
-  summary: string;
-  kind: ContentKind;
-  providerId: string;
-  status: 'ready' | 'queued';
-  updatedAt: string;
 }

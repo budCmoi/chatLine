@@ -1,77 +1,164 @@
+import { useRouter } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
-import { FadeInView } from '@/components/fade-in-view';
-import { DataRow, PillButton, ScreenContainer, ScreenHeader, SectionCard } from '@/components/ui';
-import { useAssistantStore } from '@/stores/assistant-store';
+import { FadeInView } from '../../components/fade-in-view';
+import { useDrawerControls } from '../../components/app-shell';
+import {
+  DataRow,
+  InputField,
+  PageHeader,
+  PillButton,
+  PrimaryButton,
+  ScreenContainer,
+  SectionCard,
+  SettingToggleRow,
+  StatusBadge,
+} from '../../components/ui';
+import { useI18n } from '../../lib/localization';
+import { useAssistantStore } from '../../stores/assistant-store';
 
 export default function ProfileScreen() {
-  const preferences = useAssistantStore((state) => state.preferences);
-  const providers = useAssistantStore((state) => state.providers);
-  const messages = useAssistantStore((state) => state.messages);
-  const libraryItems = useAssistantStore((state) => state.libraryItems);
-  const togglePreference = useAssistantStore((state) => state.togglePreference);
+  const router = useRouter();
+  const { openDrawer } = useDrawerControls();
+  const { t } = useI18n();
+  const subscriptionPlan = useAssistantStore((state) => state.subscriptionPlan);
+  const profile = useAssistantStore((state) => state.profile);
+  const notifications = useAssistantStore((state) => state.notifications);
+  const sessions = useAssistantStore((state) => state.sessions);
+  const activeConversationId = useAssistantStore((state) => state.activeConversationId);
+  const updateAlias = useAssistantStore((state) => state.updateAlias);
+  const setTone = useAssistantStore((state) => state.setTone);
+  const setInterfaceColor = useAssistantStore((state) => state.setInterfaceColor);
+  const toggleNotification = useAssistantStore((state) => state.toggleNotification);
+  const archiveConversation = useAssistantStore((state) => state.archiveConversation);
+  const deleteConversation = useAssistantStore((state) => state.deleteConversation);
+  const deleteAllData = useAssistantStore((state) => state.deleteAllData);
+  const closeOtherSessions = useAssistantStore((state) => state.closeOtherSessions);
+  const startFreshChat = useAssistantStore((state) => state.startFreshChat);
 
   return (
     <ScreenContainer>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 28 }}>
         <FadeInView>
-          <ScreenHeader
-            eyebrow="PROFILE / CONTROL"
-            title="System preferences, rollout visibility and platform posture."
-            subtitle="The product stays stripped down visually while surfacing the signals that matter for a real startup-grade build."
+          <PageHeader
+            onMenuPress={openDrawer}
+            eyebrow={t('profileEyebrow')}
+            title={t('profileTitle')}
+            subtitle={t('profileSubtitle')}
+            rightSlot={<StatusBadge label={subscriptionPlan === 'premium' ? t('premiumBadge') : t('freeBadge')} tone={subscriptionPlan === 'premium' ? 'secondary' : 'primary'} />}
           />
         </FadeInView>
 
-        <FadeInView delay={60}>
-          <SectionCard title="ACCOUNT" subtitle="Compact identity and operating overview.">
-            <DataRow label="Name" value="ibr. drame" />
-            <DataRow label="Providers" value={`${providers.length} connected modules`} />
-            <DataRow label="Messages" value={`${messages.length} tracked events`} />
-            <DataRow label="Assets" value={`${libraryItems.length} stored outputs`} />
+        <FadeInView delay={50}>
+          <SectionCard title={t('accountSection').toUpperCase()} subtitle={t('profileDescription')}>
+            <DataRow label={t('emailLabel')} value={profile.email} />
           </SectionCard>
         </FadeInView>
 
-        <FadeInView delay={120}>
-          <SectionCard title="PREFERENCES" subtitle="Each toggle keeps the same monochrome behavior language.">
-            <View className="flex-row flex-wrap gap-2">
-              <PillButton
-                label={`MEMORY ${preferences.memory ? 'ON' : 'OFF'}`}
-                active={preferences.memory}
-                onPress={() => togglePreference('memory')}
-              />
-              <PillButton
-                label={`STREAM ${preferences.streaming ? 'ON' : 'OFF'}`}
-                active={preferences.streaming}
-                onPress={() => togglePreference('streaming')}
-              />
-              <PillButton
-                label={`SEARCH ${preferences.semanticSearch ? 'ON' : 'OFF'}`}
-                active={preferences.semanticSearch}
-                onPress={() => togglePreference('semanticSearch')}
-              />
-              <PillButton
-                label={`VOICE ${preferences.voice ? 'ON' : 'OFF'}`}
-                active={preferences.voice}
-                onPress={() => togglePreference('voice')}
-              />
+        <FadeInView delay={90}>
+          <SectionCard title={t('subscriptionSection').toUpperCase()} subtitle={subscriptionPlan === 'premium' ? t('premiumQuota') : t('freeQuota')}>
+            <DataRow label={t('subscriptionStatus')} value={subscriptionPlan === 'premium' ? t('statusPremium') : t('statusFree')} />
+            <View style={{ marginTop: 14, alignItems: 'flex-start' }}>
+              <PrimaryButton label={t('upgradeCta')} onPress={() => router.push('/(tabs)/premium')} tone={subscriptionPlan === 'premium' ? 'ghost' : 'solid'} />
             </View>
           </SectionCard>
         </FadeInView>
 
-        <FadeInView delay={180}>
-          <SectionCard title="ROADMAP" subtitle="Release framing aligned with your product brief.">
-            <DataRow label="MVP" value="Chat, auth, image generation, history" />
-            <DataRow label="V2" value="Audio, video, vector memory, search" />
-            <DataRow label="V3" value="Advanced assistant, personalization, multi-agent" />
+        <FadeInView delay={130}>
+          <SectionCard title={t('personalizationSection').toUpperCase()} subtitle={t('premiumFeatureThemes')}>
+            <InputField label={t('aliasLabel')} value={profile.alias} onChangeText={updateAlias} />
+            <View style={{ marginTop: 14 }}>
+              <DataRow
+                label={t('toneLabel')}
+                value={profile.tone === 'direct' ? t('toneDirect') : profile.tone === 'strategic' ? t('toneStrategic') : t('toneBalanced')}
+              />
+              <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                <PillButton label={t('toneBalanced')} active={profile.tone === 'balanced'} onPress={() => setTone('balanced')} />
+                <PillButton label={t('toneDirect')} active={profile.tone === 'direct'} onPress={() => setTone('direct')} />
+                <PillButton label={t('toneStrategic')} active={profile.tone === 'strategic'} onPress={() => setTone('strategic')} />
+              </View>
+            </View>
+            <View style={{ marginTop: 14 }}>
+              <DataRow
+                label={t('interfaceColorLabel')}
+                value={profile.interfaceColor === 'violet' ? t('interfaceViolet') : profile.interfaceColor === 'graphite' ? t('interfaceGraphite') : t('interfaceGold')}
+              />
+              <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                <PillButton label={t('interfaceGold')} active={profile.interfaceColor === 'gold'} onPress={() => setInterfaceColor('gold')} />
+                <PillButton label={t('interfaceViolet')} active={profile.interfaceColor === 'violet'} onPress={() => setInterfaceColor('violet')} />
+                <PillButton label={t('interfaceGraphite')} active={profile.interfaceColor === 'graphite'} onPress={() => setInterfaceColor('graphite')} />
+              </View>
+            </View>
           </SectionCard>
         </FadeInView>
 
-        <FadeInView delay={240}>
-          <SectionCard title="RUNTIME" subtitle="Security and deployment posture surfaced as facts, not decoration.">
-            <DataRow label="Transport" value="HTTPS / JWT / OAuth" />
-            <DataRow label="Storage" value="PostgreSQL, Prisma, object storage" />
-            <DataRow label="Realtime" value="REST + WebSocket orchestration" />
-            <DataRow label="Deploy" value="Expo, AWS or Render, GitHub Actions" />
+        <FadeInView delay={170}>
+          <SectionCard title={t('notificationsSection').toUpperCase()} subtitle="On / off controls stay explicit and compact.">
+            <SettingToggleRow label={t('notificationProduct')} value={notifications.product} onPress={() => toggleNotification('product')} />
+            <SettingToggleRow label={t('notificationBilling')} value={notifications.billing} onPress={() => toggleNotification('billing')} />
+            <SettingToggleRow label={t('notificationSecurity')} value={notifications.security} onPress={() => toggleNotification('security')} />
+          </SectionCard>
+        </FadeInView>
+
+        <FadeInView delay={210}>
+          <SectionCard title={t('dataSection').toUpperCase()} subtitle="Clear data controls for a ChatGPT-like account area.">
+            <DataRow label={t('currentChatLabel')} value={activeConversationId ?? t('noCurrentChat')} />
+            <View style={{ marginTop: 14, flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              <PrimaryButton
+                label={t('archiveCurrentChat')}
+                onPress={() => (activeConversationId ? archiveConversation(activeConversationId) : undefined)}
+                tone="ghost"
+                disabled={!activeConversationId}
+              />
+              <PrimaryButton
+                label={t('deleteChat')}
+                onPress={() => (activeConversationId ? deleteConversation(activeConversationId) : undefined)}
+                tone="ghost"
+                disabled={!activeConversationId}
+              />
+              <PrimaryButton label={t('deleteAllData')} onPress={deleteAllData} tone="ghost" />
+              <PrimaryButton label={t('exportData')} tone="ghost" disabled />
+            </View>
+          </SectionCard>
+        </FadeInView>
+
+        <FadeInView delay={250}>
+          <SectionCard title={t('archivedSection').toUpperCase()} subtitle={t('archivedSubtitle')}>
+            <PrimaryButton label={t('viewArchived')} onPress={() => router.push('/(tabs)/archived')} tone="ghost" />
+          </SectionCard>
+        </FadeInView>
+
+        <FadeInView delay={290}>
+          <SectionCard title={t('securitySection').toUpperCase()} subtitle={t('activeSessions')}>
+            {sessions.map((session) => (
+              <DataRow key={session.id} label={session.label} value={session.location} />
+            ))}
+            <View style={{ marginTop: 14, alignItems: 'flex-start' }}>
+              <PrimaryButton label={t('manageSessions')} onPress={closeOtherSessions} tone="ghost" />
+            </View>
+          </SectionCard>
+        </FadeInView>
+
+        <FadeInView delay={330}>
+          <SectionCard title={t('actionsSection').toUpperCase()} subtitle="Demo actions for the current MVP account state.">
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              <PrimaryButton
+                label={t('signOut')}
+                onPress={() => {
+                  startFreshChat();
+                  router.replace('/(tabs)');
+                }}
+                tone="ghost"
+              />
+              <PrimaryButton
+                label={t('deleteAccount')}
+                onPress={() => {
+                  deleteAllData();
+                  router.replace('/(tabs)');
+                }}
+                tone="ghost"
+              />
+            </View>
           </SectionCard>
         </FadeInView>
       </ScrollView>
