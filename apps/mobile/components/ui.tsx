@@ -1,4 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { Pressable, Text, TextInput, View, type TextInputProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -69,19 +71,63 @@ export function ScreenContainer({ children, footer }: ScreenContainerProps) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.background }}>
-      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 12 }}>{children}</View>
-      {footer ? (
+      <View style={{ flex: 1 }}>
+        <LinearGradient
+          colors={[palette.backgroundStart, palette.backgroundMiddle, palette.backgroundEnd]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ position: 'absolute', inset: 0 }}
+        />
         <View
           style={{
+            position: 'absolute',
+            top: -40,
+            right: -20,
+            height: 220,
+            width: 220,
+            borderRadius: 999,
+            backgroundColor: palette.ambientSecondary,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            left: -60,
+            bottom: 120,
+            height: 240,
+            width: 240,
+            borderRadius: 999,
+            backgroundColor: palette.ambientPrimary,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            right: -40,
+            bottom: -20,
+            height: 200,
+            width: 200,
+            borderRadius: 999,
+            backgroundColor: palette.ambientTertiary,
+          }}
+        />
+        <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 12 }}>{children}</View>
+      </View>
+      {footer ? (
+        <BlurView
+          intensity={34}
+          tint="light"
+          style={{
+            overflow: 'hidden',
             borderTopWidth: 1,
             borderTopColor: palette.border,
-            backgroundColor: palette.background,
+            backgroundColor: palette.surface,
             paddingHorizontal: 20,
             paddingTop: 16,
             paddingBottom: 16,
           }}>
           {footer}
-        </View>
+        </BlurView>
       ) : null}
     </SafeAreaView>
   );
@@ -104,7 +150,7 @@ export function PageHeader({
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                color: palette.primary,
+                color: palette.textSecondary,
                 fontFamily: 'SpaceMono',
                 fontSize: 11,
                 letterSpacing: 2,
@@ -116,8 +162,8 @@ export function PageHeader({
                 marginTop: 12,
                 color: palette.textPrimary,
                 fontFamily: 'SpaceMono',
-                fontSize: 30,
-                lineHeight: 38,
+                fontSize: 28,
+                lineHeight: 36,
               }}>
               {title}
             </Text>

@@ -56,7 +56,7 @@ function RootLayoutNav() {
 
   const navigationTheme = useMemo<Theme>(
     () => ({
-      dark: true,
+      dark: false,
       colors: {
         primary: palette.primary,
         background: palette.background,
@@ -90,7 +90,7 @@ function RootLayoutNav() {
   return (
     <LocalizationProvider>
       <ThemeProvider value={navigationTheme}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
         <Stack
           screenOptions={{
             headerShown: false,

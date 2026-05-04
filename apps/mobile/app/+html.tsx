@@ -29,8 +29,8 @@ export default function Root({ children }: { children: React.ReactNode }) {
 
 const responsiveBackground = `
 html {
-  background-color: #000;
+  background: linear-gradient(135deg, #dbeafe, #e9d5ff, #fbcfe8);
 }
 body {
-  background-color: #000;
+  background: linear-gradient(135deg, #dbeafe, #e9d5ff, #fbcfe8);
 }`;
