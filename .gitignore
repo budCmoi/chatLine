@@ -1,0 +1,15 @@
+node_modules
+.npm-cache
+
+apps/mobile/node_modules
+apps/mobile/.expo
+apps/mobile/dist
+
+apps/api/node_modules
+apps/api/dist
+apps/api/coverage
+apps/api/.env
+apps/api/.env.*
+!apps/api/.env.example
+
+.DS_Store

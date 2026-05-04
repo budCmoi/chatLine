@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum ContentKind {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum AssetStatus {
+  DRAFT
+  QUEUED
+  READY
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  email               String               @unique
+  displayName         String?
+  avatarUrl           String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  conversations       Conversation[]
+  assets              ContentAsset[]
+  providerPreferences ProviderPreference[]
+}
+
+model Conversation {
+  id             String    @id @default(cuid())
+  title          String
+  mode           String    @default("expert")
+  vectorNamespace String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  lastActivityAt DateTime  @default(now())
+  userId         String?
+  user           User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  messages       Message[]
+
+  @@index([userId, lastActivityAt])
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  role           MessageRole
+  content        String
+  providerId     String?
+  metadata       Json?
+  createdAt      DateTime      @default(now())
+  conversationId String
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model ContentAsset {
+  id         String      @id @default(cuid())
+  title      String
+  summary    String?
+  prompt     String
+  kind       ContentKind
+  status     AssetStatus @default(QUEUED)
+  providerId String
+  folder     String?
+  storageKey String?
+  metadata   Json?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  userId     String?
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, kind, status])
+}
+
+model ProviderPreference {
+  id          String      @id @default(cuid())
+  providerId  String
+  capability  ContentKind
+  defaultMode String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, providerId, capability])
+}
