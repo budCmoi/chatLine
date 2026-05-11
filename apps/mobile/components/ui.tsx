@@ -1,8 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
 import type { PropsWithChildren, ReactNode } from 'react';
-import { Pressable, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Animated, Pressable, Text, TextInput, View, type TextInputProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useI18n } from '../lib/localization';
@@ -10,6 +9,7 @@ import { useAppPalette } from '../lib/theme-palette';
 
 interface ScreenContainerProps extends PropsWithChildren {
   footer?: ReactNode;
+  noPad?: boolean;
 }
 
 interface PageHeaderProps {
@@ -35,7 +35,7 @@ interface PillButtonProps {
 interface PrimaryButtonProps {
   label: string;
   onPress?: () => void;
-  tone?: 'solid' | 'ghost';
+  tone?: 'solid' | 'ghost' | 'violet';
   disabled?: boolean;
   icon?: React.ComponentProps<typeof FontAwesome>['name'];
 }
@@ -66,25 +66,22 @@ interface EmptyStateProps {
   action?: ReactNode;
 }
 
-export function ScreenContainer({ children, footer }: ScreenContainerProps) {
+export function ScreenContainer({ children, footer, noPad }: ScreenContainerProps) {
   const palette = useAppPalette();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.background }}>
-      <View style={{ flex: 1 }}>
-        <LinearGradient
-          colors={[palette.backgroundStart, palette.backgroundMiddle, palette.backgroundEnd]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ position: 'absolute', inset: 0 }}
-        />
+      {/* Ambient glows – profondeur visuelle subtile */}
+      <View
+        pointerEvents="none"
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
         <View
           style={{
             position: 'absolute',
-            top: -40,
-            right: -20,
-            height: 220,
-            width: 220,
+            top: -80,
+            right: -80,
+            height: 300,
+            width: 300,
             borderRadius: 999,
             backgroundColor: palette.ambientSecondary,
           }}
@@ -92,39 +89,31 @@ export function ScreenContainer({ children, footer }: ScreenContainerProps) {
         <View
           style={{
             position: 'absolute',
-            left: -60,
-            bottom: 120,
-            height: 240,
-            width: 240,
+            left: -100,
+            bottom: 60,
+            height: 340,
+            width: 340,
             borderRadius: 999,
             backgroundColor: palette.ambientPrimary,
           }}
         />
-        <View
-          style={{
-            position: 'absolute',
-            right: -40,
-            bottom: -20,
-            height: 200,
-            width: 200,
-            borderRadius: 999,
-            backgroundColor: palette.ambientTertiary,
-          }}
-        />
-        <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 12 }}>{children}</View>
       </View>
+
+      <View style={{ flex: 1, paddingHorizontal: noPad ? 0 : 20, paddingTop: noPad ? 0 : 12 }}>
+        {children}
+      </View>
+
       {footer ? (
         <BlurView
-          intensity={34}
-          tint="light"
+          intensity={28}
+          tint="dark"
           style={{
             overflow: 'hidden',
             borderTopWidth: 1,
             borderTopColor: palette.border,
-            backgroundColor: palette.surface,
             paddingHorizontal: 20,
-            paddingTop: 16,
-            paddingBottom: 16,
+            paddingTop: 14,
+            paddingBottom: 20,
           }}>
           {footer}
         </BlurView>
@@ -150,31 +139,31 @@ export function PageHeader({
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                color: palette.textSecondary,
+                color: palette.primary,
                 fontFamily: 'SpaceMono',
-                fontSize: 11,
-                letterSpacing: 2,
+                fontSize: 10,
+                letterSpacing: 2.5,
               }}>
               {eyebrow}
             </Text>
             <Text
               style={{
-                marginTop: 12,
+                marginTop: 10,
                 color: palette.textPrimary,
                 fontFamily: 'SpaceMono',
-                fontSize: 28,
-                lineHeight: 36,
+                fontSize: 26,
+                lineHeight: 34,
               }}>
               {title}
             </Text>
             <Text
               style={{
-                marginTop: 10,
+                marginTop: 8,
                 maxWidth: 330,
                 color: palette.textSecondary,
                 fontFamily: 'SpaceMono',
-                fontSize: 13,
-                lineHeight: 22,
+                fontSize: 12,
+                lineHeight: 20,
               }}>
               {subtitle}
             </Text>
@@ -192,8 +181,8 @@ export function SectionCard({ title, subtitle, children }: SectionCardProps) {
   return (
     <View
       style={{
-        marginBottom: 16,
-        borderRadius: 28,
+        marginBottom: 14,
+        borderRadius: 24,
         borderWidth: 1,
         borderColor: palette.border,
         backgroundColor: palette.surface,
@@ -203,52 +192,59 @@ export function SectionCard({ title, subtitle, children }: SectionCardProps) {
         style={{
           color: palette.primary,
           fontFamily: 'SpaceMono',
-          fontSize: 11,
-          letterSpacing: 2,
+          fontSize: 10,
+          letterSpacing: 2.5,
         }}>
         {title}
       </Text>
       <Text
         style={{
-          marginTop: 8,
+          marginTop: 6,
           color: palette.textSecondary,
           fontFamily: 'SpaceMono',
-          fontSize: 13,
-          lineHeight: 22,
+          fontSize: 12,
+          lineHeight: 20,
         }}>
         {subtitle}
       </Text>
-      <View style={{ marginTop: 16 }}>{children}</View>
+      <View style={{ marginTop: 14 }}>{children}</View>
     </View>
   );
 }
 
 export function PillButton({ label, active = false, onPress, disabled = false }: PillButtonProps) {
   const palette = useAppPalette();
+  const scale = new Animated.Value(1);
+  const handleIn = () => Animated.timing(scale, { toValue: 0.93, duration: 100, useNativeDriver: true }).start();
+  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 120, useNativeDriver: true }).start();
 
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      style={{
-        borderRadius: 999,
-        borderWidth: 1,
-        borderColor: active ? palette.primary : palette.border,
-        backgroundColor: active ? palette.primary : palette.surfaceRaised,
-        opacity: disabled ? 0.48 : 1,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-      }}>
-      <Text
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable
+        onPress={onPress}
+        onPressIn={handleIn}
+        onPressOut={handleOut}
+        disabled={disabled}
         style={{
-          color: active ? palette.primaryText : palette.textSecondary,
-          fontFamily: 'SpaceMono',
-          fontSize: 11,
-          letterSpacing: 1.2,
+          borderRadius: 999,
+          borderWidth: 1,
+          borderColor: active ? palette.primary : palette.border,
+          backgroundColor: active ? palette.primary : palette.surfaceRaised,
+          opacity: disabled ? 0.38 : 1,
+          paddingHorizontal: 14,
+          paddingVertical: 10,
         }}>
-        {label}
-      </Text>
-    </Pressable>
+        <Text
+          style={{
+            color: active ? palette.primaryText : palette.textSecondary,
+            fontFamily: 'SpaceMono',
+            fontSize: 11,
+            letterSpacing: 1.2,
+          }}>
+          {label}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -260,36 +256,48 @@ export function PrimaryButton({
   icon,
 }: PrimaryButtonProps) {
   const palette = useAppPalette();
+  const scale = new Animated.Value(1);
+  const handleIn = () => Animated.timing(scale, { toValue: 0.95, duration: 100, useNativeDriver: true }).start();
+  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 120, useNativeDriver: true }).start();
+
   const isSolid = tone === 'solid';
+  const isViolet = tone === 'violet';
+  const bgColor = isSolid ? palette.primary : isViolet ? palette.secondary : palette.surfaceRaised;
+  const borderColor = isSolid ? palette.primary : isViolet ? palette.secondary : palette.border;
+  const textColor = isSolid ? palette.primaryText : isViolet ? '#FFFFFF' : palette.textPrimary;
 
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      style={{
-        minWidth: 116,
-        borderRadius: 999,
-        borderWidth: 1,
-        borderColor: isSolid ? palette.primary : palette.border,
-        backgroundColor: isSolid ? palette.primary : palette.surfaceRaised,
-        opacity: disabled ? 0.48 : 1,
-        paddingHorizontal: 16,
-        paddingVertical: 13,
-      }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        {icon ? <FontAwesome name={icon} size={12} color={isSolid ? palette.primaryText : palette.textPrimary} /> : null}
-        <Text
-          style={{
-            color: isSolid ? palette.primaryText : palette.textPrimary,
-            textAlign: 'center',
-            fontFamily: 'SpaceMono',
-            fontSize: 11,
-            letterSpacing: 1.5,
-          }}>
-          {label}
-        </Text>
-      </View>
-    </Pressable>
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable
+        onPress={onPress}
+        onPressIn={handleIn}
+        onPressOut={handleOut}
+        disabled={disabled}
+        style={{
+          minWidth: 116,
+          borderRadius: 999,
+          borderWidth: 1,
+          borderColor,
+          backgroundColor: bgColor,
+          opacity: disabled ? 0.38 : 1,
+          paddingHorizontal: 20,
+          paddingVertical: 14,
+        }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          {icon ? <FontAwesome name={icon} size={12} color={textColor} /> : null}
+          <Text
+            style={{
+              color: textColor,
+              textAlign: 'center',
+              fontFamily: 'SpaceMono',
+              fontSize: 11,
+              letterSpacing: 1.6,
+            }}>
+            {label}
+          </Text>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -484,23 +492,30 @@ export function EmptyState({ title, body, action }: EmptyStateProps) {
 function MenuButton({ onPress }: { onPress: () => void }) {
   const palette = useAppPalette();
   const { t } = useI18n();
+  const scale = new Animated.Value(1);
+  const handleIn = () => Animated.timing(scale, { toValue: 0.90, duration: 100, useNativeDriver: true }).start();
+  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 120, useNativeDriver: true }).start();
 
   return (
-    <Pressable
-      accessibilityLabel={t('openMenu')}
-      onPress={onPress}
-      style={{
-        marginTop: 2,
-        height: 44,
-        width: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 999,
-        borderWidth: 1,
-        borderColor: palette.primary,
-        backgroundColor: palette.primary,
-      }}>
-      <FontAwesome name="bars" size={15} color={palette.primaryText} />
-    </Pressable>
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable
+        accessibilityLabel={t('openMenu')}
+        onPress={onPress}
+        onPressIn={handleIn}
+        onPressOut={handleOut}
+        style={{
+          marginTop: 2,
+          height: 42,
+          width: 42,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 14,
+          borderWidth: 1,
+          borderColor: palette.border,
+          backgroundColor: palette.surfaceRaised,
+        }}>
+        <FontAwesome name="bars" size={14} color={palette.textPrimary} />
+      </Pressable>
+    </Animated.View>
   );
 }

@@ -35,10 +35,10 @@ export default function PremiumScreen() {
           style={{
             marginBottom: 16,
             overflow: 'hidden',
-            borderRadius: 32,
+            borderRadius: 28,
             borderWidth: 1,
-            borderColor: palette.border,
-            backgroundColor: palette.surfaceRaised,
+            borderColor: 'rgba(108,92,231,0.35)',
+            backgroundColor: 'rgba(108,92,231,0.07)',
             padding: 18,
           }}>
           <View
@@ -49,7 +49,7 @@ export default function PremiumScreen() {
               height: 120,
               width: 120,
               borderRadius: 999,
-              backgroundColor: palette.secondarySoft,
+              backgroundColor: 'rgba(108,92,231,0.20)',
             }}
           />
           <View
@@ -60,7 +60,7 @@ export default function PremiumScreen() {
               height: 120,
               width: 120,
               borderRadius: 999,
-              backgroundColor: 'rgba(244,226,122,0.18)',
+              backgroundColor: 'rgba(245,208,66,0.12)',
             }}
           />
           <Text
@@ -172,7 +172,7 @@ function ComparisonRow({
           borderRadius: 20,
           borderWidth: 1,
           borderColor: palettePrimary,
-          backgroundColor: 'rgba(244,226,122,0.14)',
+          backgroundColor: 'rgba(245,208,66,0.10)',
           padding: 12,
         }}>
         <Text style={{ color: '#FFFFFF', fontFamily: 'SpaceMono', fontSize: 11, lineHeight: 18 }}>{rightLabel}</Text>

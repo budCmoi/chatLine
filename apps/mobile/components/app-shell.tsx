@@ -114,32 +114,33 @@ export function AppShell() {
             width: 304,
             transform: [{ translateX }],
           }}>
-          <SafeAreaView style={{ flex: 1, backgroundColor: palette.drawer }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }}>
             <View style={{ flex: 1, paddingHorizontal: 18, paddingTop: 10, paddingBottom: 18 }}>
+              {/* Drawer header */}
               <View
                 style={{
-                  borderRadius: 26,
+                  borderRadius: 20,
                   borderWidth: 1,
-                  borderColor: palette.border,
-                  backgroundColor: palette.surfaceRaised,
+                  borderColor: 'rgba(255,255,255,0.08)',
+                  backgroundColor: 'rgba(255,255,255,0.05)',
                   padding: 16,
                 }}>
                 <Text
                   style={{
                     color: palette.primary,
                     fontFamily: 'SpaceMono',
-                    fontSize: 12,
-                    letterSpacing: 1.8,
+                    fontSize: 11,
+                    letterSpacing: 2.5,
                   }}>
                   {t('appName').toUpperCase()}
                 </Text>
                 <Text
                   style={{
-                    marginTop: 10,
+                    marginTop: 8,
                     color: palette.textPrimary,
                     fontFamily: 'SpaceMono',
-                    fontSize: 18,
-                    lineHeight: 28,
+                    fontSize: 17,
+                    lineHeight: 26,
                   }}>
                   {t('drawerTitle')}
                 </Text>
@@ -148,8 +149,8 @@ export function AppShell() {
                     marginTop: 6,
                     color: palette.textMuted,
                     fontFamily: 'SpaceMono',
-                    fontSize: 12,
-                    lineHeight: 20,
+                    fontSize: 11,
+                    lineHeight: 18,
                   }}>
                   {t('drawerSubtitle')}
                 </Text>
@@ -186,11 +187,11 @@ export function AppShell() {
                           router.push('/(tabs)/chat');
                         }}
                         style={{
-                          marginBottom: 12,
-                          borderRadius: 24,
+                          marginBottom: 10,
+                          borderRadius: 20,
                           borderWidth: 1,
-                          borderColor: active ? palette.primary : palette.border,
-                          backgroundColor: active ? palette.secondarySoft : palette.surface,
+                          borderColor: active ? palette.primary : 'rgba(255,255,255,0.07)',
+                          backgroundColor: active ? 'rgba(245,208,66,0.07)' : 'rgba(255,255,255,0.04)',
                           padding: 14,
                         }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
@@ -230,10 +231,10 @@ export function AppShell() {
                 ) : (
                   <View
                     style={{
-                      borderRadius: 22,
-                      borderWidth: 1,
-                      borderColor: palette.border,
-                      backgroundColor: palette.surface,
+                    borderRadius: 20,
+                    borderWidth: 1,
+                    borderColor: 'rgba(255,255,255,0.07)',
+                    backgroundColor: 'rgba(255,255,255,0.04)',
                       padding: 16,
                     }}>
                     <Text
@@ -258,15 +259,15 @@ export function AppShell() {
                     gap: 10,
                     borderRadius: 999,
                     borderWidth: 1,
-                    borderColor: palette.border,
-                    backgroundColor: palette.primary,
+                    borderColor: 'rgba(255,255,255,0.10)',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
                     paddingHorizontal: 16,
                     paddingVertical: 12,
                   }}>
-                  <FontAwesome name="user-o" size={14} color={palette.primaryText} />
+                  <FontAwesome name="user-o" size={14} color={palette.textSecondary} />
                   <Text
                     style={{
-                      color: palette.primaryText,
+                      color: palette.textSecondary,
                       fontFamily: 'SpaceMono',
                       fontSize: 11,
                       letterSpacing: 1.2,
@@ -303,8 +304,8 @@ function DrawerActionButton({
         gap: 8,
         borderRadius: 999,
         borderWidth: 1,
-        borderColor: palette.border,
-        backgroundColor: palette.surface,
+        borderColor: 'rgba(255,255,255,0.08)',
+        backgroundColor: 'rgba(255,255,255,0.05)',
         paddingHorizontal: 12,
         paddingVertical: 10,
       }}>

@@ -8,8 +8,10 @@ export interface AppPalette {
   backgroundEnd: string;
   surface: string;
   surfaceRaised: string;
+  surfaceGlass: string;
   drawer: string;
   border: string;
+  borderGlow: string;
   ambientPrimary: string;
   ambientSecondary: string;
   ambientTertiary: string;
@@ -25,75 +27,47 @@ export interface AppPalette {
   overlay: string;
 }
 
+// Palette commune: noir profond + jaune premium + violet profond
+const base: AppPalette = {
+  background: '#000000',
+  backgroundStart: '#000000',
+  backgroundMiddle: '#0a0a0a',
+  backgroundEnd: '#000000',
+  surface: 'rgba(255,255,255,0.04)',
+  surfaceRaised: 'rgba(255,255,255,0.07)',
+  surfaceGlass: 'rgba(255,255,255,0.06)',
+  drawer: 'rgba(0,0,0,0.96)',
+  border: 'rgba(255,255,255,0.09)',
+  borderGlow: 'rgba(245,208,66,0.35)',
+  ambientPrimary: 'rgba(108,92,231,0.14)',
+  ambientSecondary: 'rgba(245,208,66,0.08)',
+  ambientTertiary: 'rgba(108,92,231,0.07)',
+  textPrimary: '#FFFFFF',
+  textSecondary: 'rgba(255,255,255,0.58)',
+  textMuted: 'rgba(255,255,255,0.32)',
+  primary: '#F5D042',
+  primaryText: '#000000',
+  secondary: '#6C5CE7',
+  secondarySoft: 'rgba(108,92,231,0.16)',
+  danger: '#FF5C5C',
+  dangerSoft: 'rgba(255,92,92,0.14)',
+  overlay: 'rgba(0,0,0,0.82)',
+};
+
 const palettes: Record<InterfaceColor, AppPalette> = {
-  gold: {
-    background: '#f4ecff',
-    backgroundStart: '#dbeafe',
-    backgroundMiddle: '#e9d5ff',
-    backgroundEnd: '#fbcfe8',
-    surface: 'rgba(255,255,255,0.18)',
-    surfaceRaised: 'rgba(255,255,255,0.34)',
-    drawer: 'rgba(255,255,255,0.22)',
-    border: 'rgba(255,255,255,0.34)',
-    ambientPrimary: 'rgba(59,130,246,0.24)',
-    ambientSecondary: 'rgba(168,85,247,0.22)',
-    ambientTertiary: 'rgba(244,114,182,0.18)',
-    textPrimary: '#4c1d95',
-    textSecondary: 'rgba(76,29,149,0.78)',
-    textMuted: 'rgba(76,29,149,0.50)',
-    primary: '#7c3aed',
-    primaryText: '#ffffff',
-    secondary: '#2563eb',
-    secondarySoft: 'rgba(96,165,250,0.22)',
-    danger: '#be185d',
-    dangerSoft: 'rgba(244,114,182,0.18)',
-    overlay: 'rgba(76,29,149,0.16)',
-  },
+  gold: { ...base },
   violet: {
-    background: '#f6eeff',
-    backgroundStart: '#dbeafe',
-    backgroundMiddle: '#e9d5ff',
-    backgroundEnd: '#fbcfe8',
-    surface: 'rgba(255,255,255,0.16)',
-    surfaceRaised: 'rgba(255,255,255,0.30)',
-    drawer: 'rgba(255,255,255,0.20)',
-    border: 'rgba(255,255,255,0.32)',
-    ambientPrimary: 'rgba(59,130,246,0.26)',
-    ambientSecondary: 'rgba(139,92,246,0.24)',
-    ambientTertiary: 'rgba(236,72,153,0.18)',
-    textPrimary: '#4c1d95',
-    textSecondary: 'rgba(76,29,149,0.78)',
-    textMuted: 'rgba(76,29,149,0.50)',
-    primary: '#7c3aed',
-    primaryText: '#ffffff',
-    secondary: '#2563eb',
-    secondarySoft: 'rgba(167,139,250,0.18)',
-    danger: '#be185d',
-    dangerSoft: 'rgba(244,114,182,0.18)',
-    overlay: 'rgba(76,29,149,0.16)',
+    ...base,
+    borderGlow: 'rgba(108,92,231,0.50)',
+    ambientPrimary: 'rgba(108,92,231,0.18)',
+    ambientSecondary: 'rgba(245,208,66,0.06)',
   },
   graphite: {
-    background: '#f3f1ff',
-    backgroundStart: '#dbeafe',
-    backgroundMiddle: '#ede9fe',
-    backgroundEnd: '#fbcfe8',
-    surface: 'rgba(255,255,255,0.17)',
-    surfaceRaised: 'rgba(255,255,255,0.28)',
-    drawer: 'rgba(255,255,255,0.19)',
-    border: 'rgba(255,255,255,0.30)',
-    ambientPrimary: 'rgba(99,102,241,0.18)',
-    ambientSecondary: 'rgba(147,51,234,0.20)',
-    ambientTertiary: 'rgba(244,114,182,0.14)',
-    textPrimary: '#4c1d95',
-    textSecondary: 'rgba(76,29,149,0.76)',
-    textMuted: 'rgba(76,29,149,0.48)',
-    primary: '#6d28d9',
-    primaryText: '#ffffff',
-    secondary: '#4f46e5',
-    secondarySoft: 'rgba(99,102,241,0.16)',
-    danger: '#be185d',
-    dangerSoft: 'rgba(244,114,182,0.16)',
-    overlay: 'rgba(76,29,149,0.16)',
+    ...base,
+    surface: 'rgba(255,255,255,0.05)',
+    surfaceRaised: 'rgba(255,255,255,0.09)',
+    border: 'rgba(255,255,255,0.11)',
+    borderGlow: 'rgba(255,255,255,0.28)',
   },
 };
 

@@ -68,7 +68,7 @@ export default function ChatScreen() {
                 borderRadius: 24,
                 borderWidth: 1,
                 borderColor: palette.primary,
-                backgroundColor: palette.surfaceRaised,
+                backgroundColor: 'rgba(245,208,66,0.06)',
                 padding: 14,
               }}>
               <Text
@@ -99,10 +99,10 @@ export default function ChatScreen() {
 
           <View
             style={{
-              borderRadius: 28,
+              borderRadius: 24,
               borderWidth: 1,
               borderColor: palette.border,
-              backgroundColor: palette.surface,
+              backgroundColor: 'rgba(0,0,0,0.60)',
               padding: 14,
             }}>
             <TextInput
@@ -306,25 +306,25 @@ function MessageBubble({
       style={{
         alignSelf: isUser ? 'flex-end' : 'flex-start',
         maxWidth: isUser ? '88%' : '92%',
-        borderRadius: 28,
+        borderRadius: 24,
         borderWidth: 1,
-        borderColor: isUser ? palette.primary : palette.border,
-        backgroundColor: isUser ? palette.primary : palette.surface,
+        borderColor: isUser ? 'rgba(245,208,66,0.28)' : palette.border,
+        backgroundColor: isUser ? 'rgba(245,208,66,0.09)' : palette.surface,
         padding: 14,
       }}>
       <Text
         style={{
-          color: isUser ? palette.primaryText : palette.textMuted,
+          color: isUser ? palette.primary : palette.textMuted,
           fontFamily: 'SpaceMono',
           fontSize: 10,
           letterSpacing: 1.2,
         }}>
-        {isUser ? 'USER' : (provider?.name ?? 'AI CORE').toUpperCase()}
+        {isUser ? 'YOU' : (provider?.name ?? 'AI CORE').toUpperCase()}
       </Text>
       <Text
         style={{
           marginTop: 8,
-          color: isUser ? palette.primaryText : palette.textPrimary,
+          color: isUser ? palette.textPrimary : palette.textPrimary,
           fontFamily: 'SpaceMono',
           fontSize: 13,
           lineHeight: 22,
@@ -334,7 +334,7 @@ function MessageBubble({
       <Text
         style={{
           marginTop: 10,
-          color: isUser ? 'rgba(9,9,9,0.56)' : palette.textMuted,
+          color: isUser ? 'rgba(245,208,66,0.50)' : palette.textMuted,
           fontFamily: 'SpaceMono',
           fontSize: 10,
           letterSpacing: 1.2,
