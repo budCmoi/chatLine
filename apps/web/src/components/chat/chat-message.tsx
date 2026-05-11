@@ -47,24 +47,14 @@ export default function ChatMessage({ message, isNew = false }: ChatMessageProps
           isUser ? 'order-2' : 'order-1',
         )}
       >
-        {/* Avatar for AI */}
-        {!isUser && (
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-6 h-6 rounded-lg bg-gold/15 border border-gold/20 flex items-center justify-center">
-              <AIIcon />
-            </div>
-            <span className="text-xs text-snow/35 font-medium">
-              {message.model ?? 'ChatLine'}
-            </span>
-          </div>
-        )}
+        {/* No label — distinction by alignment + color only */}
 
         <div
           className={cn(
             'relative px-4 py-3 text-sm leading-relaxed',
             isUser
               ? 'bg-gold text-ink font-medium rounded-2xl rounded-br-md shadow-md'
-              : 'bg-ink-surface border border-rim text-snow/85 rounded-2xl rounded-bl-md shadow-card',
+              : 'bg-ink-surface text-snow/85 rounded-2xl shadow-card',
           )}
         >
           {message.content ? (

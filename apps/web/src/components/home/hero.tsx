@@ -111,7 +111,7 @@ function FeatureBlock({
         </span>
       </div>
       <h2
-        className="heading-mono text-2xl sm:text-3xl md:text-4xl text-snow/90 mb-5"
+        className="font-display font-semibold text-2xl sm:text-3xl md:text-4xl text-snow/90 mb-5 tracking-tight"
         style={{ whiteSpace: 'pre-line' }}
       >
         {heading}
@@ -183,7 +183,7 @@ function HeroSection() {
 
       <h1
         ref={headingRef}
-        className="heading-mono text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-7 max-w-5xl mx-auto"
+        className="font-display font-semibold text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-7 max-w-5xl mx-auto tracking-tight"
         aria-label="L'IA qui pense avec vous."
       >
         {["L'IA", 'qui', 'pense', 'avec', 'vous.'].map((word, i) => (

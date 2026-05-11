@@ -1,4 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {
+  CormorantGaramond_400Regular,
+  CormorantGaramond_400Regular_Italic,
+  CormorantGaramond_500Medium,
+  CormorantGaramond_600SemiBold,
+  CormorantGaramond_700Bold,
+} from '@expo-google-fonts/cormorant-garamond';
+import {
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_700Bold,
+} from '@expo-google-fonts/dm-sans';
 import { ThemeProvider, type Theme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -28,8 +40,18 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    // SpaceMono kept for backward-compat but no longer actively used in UI
+    // SpaceMono kept for backward-compat
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    // Canela substitute — editorial display serif
+    CormorantGaramond_400Regular,
+    CormorantGaramond_400Regular_Italic,
+    CormorantGaramond_500Medium,
+    CormorantGaramond_600SemiBold,
+    CormorantGaramond_700Bold,
+    // Mier substitute — clean humanist sans for all UI
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_700Bold,
     ...FontAwesome.font,
   });
 

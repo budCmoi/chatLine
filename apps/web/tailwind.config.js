@@ -37,9 +37,9 @@ module.exports = {
         rim: 'rgba(255,255,255,0.06)',
       },
       fontFamily: {
-        sans: ['var(--font-jetbrains)', 'JetBrains Mono', 'monospace'],
-        display: ['var(--font-jetbrains)', 'JetBrains Mono', 'monospace'],
-        mono: ['var(--font-jetbrains)', 'JetBrains Mono', 'monospace'],
+        sans: ['var(--font-mier)', 'DM Sans', 'system-ui', 'sans-serif'],
+        display: ['var(--font-canela)', 'Cormorant Garamond', 'Georgia', 'serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       maxWidth: {
         app: '1100px',

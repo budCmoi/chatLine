@@ -102,8 +102,8 @@ export default function Sidebar() {
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-rim">
-          <span className="font-display font-bold text-base text-snow tracking-tight">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-rim/60">
+          <span className="font-display font-semibold text-base text-snow tracking-tight">
             Chat<span className="text-gold">Line</span>
           </span>
           <button
@@ -114,23 +114,21 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* New chat */}
+        {/* New chat — full-width premium button */}
         <div className="px-4 pt-3 pb-2">
           <Link
             href="/"
             onClick={() => setSidebarOpen(false)}
-            className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl border border-dashed border-rim hover:border-gold/25 text-snow/40 hover:text-snow/70 transition-all duration-200 text-sm group"
+            className="flex items-center justify-center gap-2.5 w-full px-4 py-3 rounded-xl bg-snow/[0.06] hover:bg-snow/[0.09] active:bg-snow/[0.12] text-snow/60 hover:text-snow/90 text-sm font-medium transition-all duration-200"
           >
-            <span className="w-5 h-5 rounded-md bg-snow/[0.06] flex items-center justify-center group-hover:bg-gold/[0.08] transition-colors">
-              <PlusIcon />
-            </span>
-            Nouveau chat
+            <PlusIcon />
+            Lancer un nouveau chat
           </Link>
         </div>
 
         {/* Search */}
         <div className="px-4 pb-3">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-rim bg-snow/[0.03] focus-within:border-gold/20 transition-colors">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-snow/[0.04] focus-within:bg-snow/[0.06] transition-colors">
             <SearchIcon />
             <input
               type="text"
@@ -186,13 +184,13 @@ export default function Sidebar() {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-rim px-4 py-4 space-y-1">
+        <div className="border-t border-rim/60 px-4 py-4 space-y-1">
           <Link
             href="/premium"
             onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gold/[0.06] transition-colors group"
           >
-            <span className="w-7 h-7 rounded-lg bg-gold/[0.08] border border-gold/15 flex items-center justify-center group-hover:bg-gold/12 transition-colors">
+            <span className="w-7 h-7 rounded-lg bg-gold/[0.08] flex items-center justify-center group-hover:bg-gold/12 transition-colors">
               <StarIcon />
             </span>
             <div>
@@ -225,8 +223,8 @@ function ConversationItem({
       className={cn(
         'group w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left transition-all duration-150',
         active
-          ? 'bg-gold/[0.07] border border-gold/12 text-snow'
-          : 'hover:bg-snow/[0.04] text-snow/50 hover:text-snow/80 border border-transparent',
+          ? 'bg-gold/[0.07] text-snow'
+          : 'hover:bg-snow/[0.04] text-snow/50 hover:text-snow/80',
       )}
     >
       <span className="flex-1 text-xs truncate">{conv.title}</span>

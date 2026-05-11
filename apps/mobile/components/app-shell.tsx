@@ -144,41 +144,42 @@ export function AppShell() {
           <SafeAreaView style={{ flex: 1, backgroundColor: '#0B0B0B' }}>
             <View style={{ flex: 1, paddingHorizontal: 18, paddingTop: 12, paddingBottom: 18 }}>
 
-              {/* â”€â”€â”€ Drawer header â”€â”€ */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              {/* ─── Drawer header ── */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                 {/* Logo */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 0 }}>
                   <Text style={{ color: '#F5F5F5', fontSize: 20, fontWeight: '700' }}>Chat</Text>
                   <Text style={{ color: '#F6D365', fontSize: 20, fontWeight: '700' }}>Line</Text>
                 </View>
-                {/* Close + New chat */}
-                <View style={{ flexDirection: 'row', gap: 8 }}>
-                  <Pressable
-                    onPress={() => {
-                      startFreshChat();
-                      router.push('/(tabs)/chat');
-                    }}
-                    style={{
-                      height: 36, width: 36, alignItems: 'center', justifyContent: 'center',
-                      borderRadius: 10, borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)',
-                      backgroundColor: 'rgba(246,211,101,0.08)',
-                    }}>
-                    <FontAwesome name="plus" size={12} color="#F6D365" />
-                  </Pressable>
-                  <Pressable
-                    onPress={() => setDrawerOpen(false)}
-                    style={{
-                      height: 36, width: 36, alignItems: 'center', justifyContent: 'center',
-                      borderRadius: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)',
-                      backgroundColor: 'rgba(255,255,255,0.04)',
-                    }}>
-                    <FontAwesome name="times" size={14} color="#F5F5F5" />
-                  </Pressable>
-                </View>
+                {/* Close only */}
+                <Pressable
+                  onPress={() => setDrawerOpen(false)}
+                  style={{
+                    height: 34, width: 34, alignItems: 'center', justifyContent: 'center',
+                    borderRadius: 9, backgroundColor: 'rgba(255,255,255,0.05)',
+                  }}>
+                  <FontAwesome name="times" size={13} color="rgba(245,245,245,0.50)" />
+                </Pressable>
               </View>
 
+              {/* ─── Wide new chat button ── */}
+              <Pressable
+                onPress={() => { startFreshChat(); setDrawerOpen(false); router.push('/(tabs)/chat'); }}
+                style={({ pressed }) => ({
+                  flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                  gap: 8, paddingVertical: 14, borderRadius: 12,
+                  backgroundColor: pressed ? 'rgba(245,245,245,0.09)' : 'rgba(245,245,245,0.06)',
+                  marginBottom: 14,
+                })}>
+                <FontAwesome name="plus" size={11} color="rgba(245,245,245,0.50)" />
+                <Text style={{ color: 'rgba(245,245,245,0.60)', fontSize: 14, fontWeight: '500' }}>
+                  {locale === 'fr' ? 'Lancer un nouveau chat' : 'Start a new chat'}
+                </Text>
+              </Pressable>
+
+
               {/* ─── Search ── */}
-              <View style={{ marginBottom: 14, flexDirection: 'row', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.04)', paddingHorizontal: 12, paddingVertical: 8, gap: 8 }}>
+              <View style={{ marginBottom: 14, flexDirection: 'row', alignItems: 'center', borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 12, paddingVertical: 8, gap: 8 }}>
                 <FontAwesome name="search" size={11} color="rgba(245,245,245,0.30)" />
                 <TextInput
                   value={searchQuery}
@@ -197,7 +198,7 @@ export function AppShell() {
               {/* ─── Conversations grouped ── */}
               <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 8 }}>
                 {filteredConversations.length === 0 ? (
-                  <View style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 16 }}>
+                  <View style={{ borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.04)', padding: 16 }}>
                     <Text style={{ color: palette.textMuted, fontSize: 13, lineHeight: 20 }}>
                       {searchQuery ? (locale === 'fr' ? 'Aucun résultat' : 'No results') : t('drawerEmpty')}
                     </Text>
@@ -250,9 +251,8 @@ export function AppShell() {
                   onPress={() => router.push('/(tabs)/profile')}
                   style={{
                     flexDirection: 'row', alignItems: 'center', gap: 10,
-                    borderRadius: 14, borderWidth: 1,
-                    borderColor: 'rgba(255,255,255,0.07)',
-                    backgroundColor: 'rgba(255,255,255,0.04)',
+                    borderRadius: 14,
+                    backgroundColor: 'rgba(255,255,255,0.05)',
                     paddingHorizontal: 16, paddingVertical: 12,
                   }}>
                   <FontAwesome name="user-o" size={13} color={palette.textSecondary} />
@@ -296,9 +296,7 @@ function ConvoGroup({
             style={{
               marginBottom: 6,
               borderRadius: 14,
-              borderWidth: 1,
-              borderColor: active ? 'rgba(246,211,101,0.30)' : 'rgba(255,255,255,0.07)',
-              backgroundColor: active ? 'rgba(246,211,101,0.07)' : 'rgba(255,255,255,0.03)',
+              backgroundColor: active ? 'rgba(246,211,101,0.08)' : 'rgba(255,255,255,0.03)',
               paddingHorizontal: 14,
               paddingVertical: 11,
             }}>
@@ -314,6 +312,7 @@ function ConvoGroup({
     </View>
   );
 }
+
 
 
 

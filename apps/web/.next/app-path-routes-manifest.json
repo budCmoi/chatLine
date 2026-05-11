@@ -1,8 +1,0 @@
-{
-  "/api/chat/route": "/api/chat",
-  "/api/conversations/[id]/route": "/api/conversations/[id]",
-  "/api/conversations/route": "/api/conversations",
-  "/c/[id]/page": "/c/[id]",
-  "/page": "/",
-  "/premium/page": "/premium"
-}

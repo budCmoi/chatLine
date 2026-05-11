@@ -239,19 +239,10 @@ function MessageBubble({ message, providers, locale }: { message: ChatMessage; p
 
   return (
     <View style={{ alignSelf: 'flex-start', maxWidth: '86%' }}>
-      {/* AI header: icon + model */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#111111', borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)', alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: '#F6D365', fontSize: 9 }}>✦</Text>
-        </View>
-        <Text style={{ color: '#F6D365', fontSize: 11, fontWeight: '600' }}>
-          {provider?.name ?? 'AI'}
-        </Text>
-      </View>
-      <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, paddingVertical: 12 }}>
+      <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ color: '#F5F5F5', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
       </View>
-      <Text style={{ marginTop: 4, color: '#555555', fontSize: 11 }}>
+      <Text style={{ marginTop: 4, color: 'rgba(245,245,245,0.25)', fontSize: 11 }}>
         {formatMessageTime(locale, message.createdAt)}
       </Text>
     </View>
@@ -259,7 +250,7 @@ function MessageBubble({ message, providers, locale }: { message: ChatMessage; p
 }
 
 // ─── Typing indicator (3 bouncing dots) ──────────────────────────────────────
-function TypingIndicator({ provider }: { provider: Provider | undefined }) {
+function TypingIndicator(_: { provider: Provider | undefined }) {
   const dot1 = useRef(new Animated.Value(0)).current;
   const dot2 = useRef(new Animated.Value(0)).current;
   const dot3 = useRef(new Animated.Value(0)).current;
@@ -283,20 +274,15 @@ function TypingIndicator({ provider }: { provider: Provider | undefined }) {
 
   return (
     <View style={{ alignSelf: 'flex-start', maxWidth: '86%' }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#111111', borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)', alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: '#F6D365', fontSize: 9 }}>✦</Text>
-        </View>
-        <Text style={{ color: '#F6D365', fontSize: 11, fontWeight: '600' }}>{provider?.name ?? 'AI'}</Text>
-      </View>
-      <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, paddingVertical: 14 }}>
+      <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, paddingHorizontal: 16, paddingVertical: 14 }}>
         <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
           {[dot1, dot2, dot3].map((d, i) => (
-            <Animated.View key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#555555', transform: [{ translateY: d }] }} />
+            <Animated.View key={i} style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: 'rgba(245,245,245,0.28)', transform: [{ translateY: d }] }} />
           ))}
         </View>
       </View>
     </View>
   );
 }
+
 

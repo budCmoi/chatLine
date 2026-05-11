@@ -1,11 +1,21 @@
 import type { Metadata } from 'next';
-import { JetBrains_Mono } from 'next/font/google';
+import { Cormorant_Garamond, DM_Sans } from 'next/font/google';
 import './globals.css';
 import LenisProvider from '@/lib/lenis-provider';
 
-const jetbrainsMono = JetBrains_Mono({
+// Canela substitute — editorial serif for display headings
+const canela = Cormorant_Garamond({
   subsets: ['latin'],
-  variable: '--font-jetbrains',
+  variable: '--font-canela',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+});
+
+// Mier substitute — humanist sans for all UI text
+const mier = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-mier',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700'],
 });
@@ -26,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={jetbrainsMono.variable}>
+    <html lang="fr" className={`${canela.variable} ${mier.variable}`}>
       <body className="font-sans bg-ink text-snow antialiased">
         <LenisProvider>{children}</LenisProvider>
       </body>
