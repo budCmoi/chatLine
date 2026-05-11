@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Fonts ───────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── Base reset ──────────────────────────────────────── */
+@layer base {
+  :root {
+    --bg: #050505;
+    --gold: #F5D042;
+    --snow: #F2F2F2;
+    --rim: rgba(255, 255, 255, 0.07);
+    --glass: rgba(255, 255, 255, 0.04);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Lenis handles smooth scroll — keep native off */
+    scroll-behavior: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #050505;
+    color: #F2F2F2;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  ::selection {
+    background: rgba(245, 208, 66, 0.2);
+    color: #F2F2F2;
+  }
+
+  /* Minimal scrollbar */
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(245, 208, 66, 0.15);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(245, 208, 66, 0.3);
+  }
+}
+
+/* ── Utility classes ─────────────────────────────────── */
+@layer utilities {
+  /* Glass morphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(40px) saturate(1.6);
+    -webkit-backdrop-filter: blur(40px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  /* Gold gradient text */
+  .text-gradient {
+    background: linear-gradient(135deg, #F5D042 0%, #F7D960 50%, #C9A820 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated shimmer for text */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      #F2F2F2 0%,
+      #F5D042 40%,
+      #F2F2F2 80%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Gold glow shadows */
+  .glow-gold {
+    box-shadow: 0 0 30px rgba(245, 208, 66, 0.12), 0 0 60px rgba(245, 208, 66, 0.04);
+  }
+  .glow-gold-sm {
+    box-shadow: 0 0 15px rgba(245, 208, 66, 0.08);
+  }
+
+  /* Scrollbar hide */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* GPU hint */
+  .gpu {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+}
+
+/* ── Keyframes ───────────────────────────────────────── */
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { box-shadow: 0 0 20px rgba(245, 208, 66, 0.06); }
+  50%       { box-shadow: 0 0 50px rgba(245, 208, 66, 0.18); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

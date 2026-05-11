@@ -8,6 +8,8 @@
   "scripts": {
     "dev:mobile": "npm run start --workspace @chatline/mobile",
     "dev:api": "npm run start:dev --workspace @chatline/api",
+    "dev:web": "npm run dev --workspace @chatline/web",
+    "build:web": "npm run build --workspace @chatline/web",
     "typecheck:mobile": "npm run typecheck --workspace @chatline/mobile",
     "build:api": "npm run build --workspace @chatline/api",
     "test:api": "npm run test --workspace @chatline/api"
