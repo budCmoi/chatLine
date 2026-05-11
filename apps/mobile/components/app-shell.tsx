@@ -8,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -57,6 +58,7 @@ export function AppShell() {
   const openConversation = useAssistantStore((state) => state.openConversation);
   const startFreshChat = useAssistantStore((state) => state.startFreshChat);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const progress = useRef(new Animated.Value(0)).current;
   const useNativeDriver = Platform.OS !== 'web';
 
@@ -68,7 +70,13 @@ export function AppShell() {
     [conversations],
   );
 
-  const groups = useMemo(() => groupConversations(activeConversations), [activeConversations]);
+  const filteredConversations = useMemo(() => {
+    if (!searchQuery.trim()) return activeConversations;
+    const q = searchQuery.toLowerCase();
+    return activeConversations.filter((c) => c.title.toLowerCase().includes(q) || c.preview.toLowerCase().includes(q));
+  }, [activeConversations, searchQuery]);
+
+  const groups = useMemo(() => groupConversations(filteredConversations), [filteredConversations]);
 
   useEffect(() => {
     Animated.timing(progress, {
@@ -133,15 +141,15 @@ export function AppShell() {
             width: 304,
             transform: [{ translateX }],
           }}>
-          <SafeAreaView style={{ flex: 1, backgroundColor: '#050505' }}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: '#0B0B0B' }}>
             <View style={{ flex: 1, paddingHorizontal: 18, paddingTop: 12, paddingBottom: 18 }}>
 
               {/* â”€â”€â”€ Drawer header â”€â”€ */}
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
                 {/* Logo */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 0 }}>
-                  <Text style={{ color: '#F2F2F2', fontSize: 20, fontWeight: '700' }}>Chat</Text>
-                  <Text style={{ color: '#F5D042', fontSize: 20, fontWeight: '700' }}>Line</Text>
+                  <Text style={{ color: '#F5F5F5', fontSize: 20, fontWeight: '700' }}>Chat</Text>
+                  <Text style={{ color: '#F6D365', fontSize: 20, fontWeight: '700' }}>Line</Text>
                 </View>
                 {/* Close + New chat */}
                 <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -152,10 +160,10 @@ export function AppShell() {
                     }}
                     style={{
                       height: 36, width: 36, alignItems: 'center', justifyContent: 'center',
-                      borderRadius: 10, borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)',
-                      backgroundColor: 'rgba(245,208,66,0.08)',
+                      borderRadius: 10, borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)',
+                      backgroundColor: 'rgba(246,211,101,0.08)',
                     }}>
-                    <FontAwesome name="plus" size={12} color="#F5D042" />
+                    <FontAwesome name="plus" size={12} color="#F6D365" />
                   </Pressable>
                   <Pressable
                     onPress={() => setDrawerOpen(false)}
@@ -164,17 +172,34 @@ export function AppShell() {
                       borderRadius: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)',
                       backgroundColor: 'rgba(255,255,255,0.04)',
                     }}>
-                    <FontAwesome name="times" size={14} color="#F2F2F2" />
+                    <FontAwesome name="times" size={14} color="#F5F5F5" />
                   </Pressable>
                 </View>
               </View>
 
-              {/* â”€â”€â”€ Conversations grouped â”€â”€ */}
+              {/* ─── Search ── */}
+              <View style={{ marginBottom: 14, flexDirection: 'row', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.04)', paddingHorizontal: 12, paddingVertical: 8, gap: 8 }}>
+                <FontAwesome name="search" size={11} color="rgba(245,245,245,0.30)" />
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder={locale === 'fr' ? 'Rechercher…' : 'Search…'}
+                  placeholderTextColor="rgba(245,245,245,0.25)"
+                  style={{ flex: 1, color: '#F5F5F5', fontSize: 13, paddingVertical: 0 }}
+                />
+                {searchQuery.length > 0 && (
+                  <Pressable onPress={() => setSearchQuery('')}>
+                    <FontAwesome name="times-circle" size={13} color="rgba(245,245,245,0.30)" />
+                  </Pressable>
+                )}
+              </View>
+
+              {/* ─── Conversations grouped ── */}
               <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 8 }}>
-                {activeConversations.length === 0 ? (
+                {filteredConversations.length === 0 ? (
                   <View style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 16 }}>
                     <Text style={{ color: palette.textMuted, fontSize: 13, lineHeight: 20 }}>
-                      {t('drawerEmpty')}
+                      {searchQuery ? (locale === 'fr' ? 'Aucun résultat' : 'No results') : t('drawerEmpty')}
                     </Text>
                   </View>
                 ) : (
@@ -213,11 +238,11 @@ export function AppShell() {
                 <Pressable
                   onPress={() => router.push('/(tabs)/premium')}
                   style={{
-                    borderRadius: 14, backgroundColor: '#F5D042',
+                    borderRadius: 14, backgroundColor: '#F6D365',
                     paddingVertical: 13, alignItems: 'center',
                   }}>
-                  <Text style={{ color: '#050505', fontSize: 13, fontWeight: '700' }}>
-                    {locale === 'fr' ? 'âœ¦ Passer Ã  Premium' : 'âœ¦ Go Premium'}
+                  <Text style={{ color: '#0B0B0B', fontSize: 13, fontWeight: '700' }}>
+                    {locale === 'fr' ? '✦ Passer à Premium — 8,99€/mois' : '✦ Go Premium — €8.99/mo'}
                   </Text>
                 </Pressable>
                 {/* Profile row */}
@@ -272,12 +297,12 @@ function ConvoGroup({
               marginBottom: 6,
               borderRadius: 14,
               borderWidth: 1,
-              borderColor: active ? 'rgba(245,208,66,0.30)' : 'rgba(255,255,255,0.07)',
-              backgroundColor: active ? 'rgba(245,208,66,0.07)' : 'rgba(255,255,255,0.03)',
+              borderColor: active ? 'rgba(246,211,101,0.30)' : 'rgba(255,255,255,0.07)',
+              backgroundColor: active ? 'rgba(246,211,101,0.07)' : 'rgba(255,255,255,0.03)',
               paddingHorizontal: 14,
               paddingVertical: 11,
             }}>
-            <Text numberOfLines={1} style={{ color: active ? '#F5D042' : palette.textPrimary, fontSize: 13, fontWeight: '500' }}>
+            <Text numberOfLines={1} style={{ color: active ? '#F6D365' : palette.textPrimary, fontSize: 13, fontWeight: '500' }}>
               {conversation.title}
             </Text>
             <Text numberOfLines={1} style={{ marginTop: 4, color: palette.textMuted, fontSize: 12 }}>
@@ -289,5 +314,7 @@ function ConvoGroup({
     </View>
   );
 }
+
+
 
 

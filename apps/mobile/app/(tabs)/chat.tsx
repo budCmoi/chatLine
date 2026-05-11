@@ -87,28 +87,28 @@ export default function ChatScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#050505' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#0B0B0B' }}>
       {/* ─── Header bar ── */}
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)' }}>
         <Pressable
           onPress={openDrawer}
           style={{ width: 38, height: 38, borderRadius: 11, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.04)', alignItems: 'center', justifyContent: 'center', marginRight: 12 }}>
-          <FontAwesome name="bars" size={13} color="#9B9B9B" />
+          <FontAwesome name="bars" size={13} color="#A1A1A1" />
         </Pressable>
 
         <View style={{ flex: 1 }}>
-          <Text numberOfLines={1} style={{ color: '#F2F2F2', fontSize: 14, fontWeight: '600' }}>
+          <Text numberOfLines={1} style={{ color: '#F5F5F5', fontSize: 14, fontWeight: '600' }}>
             {activeConversation?.title ?? t('startChat')}
           </Text>
-          <Text style={{ color: '#636363', fontSize: 11, marginTop: 1 }}>
+          <Text style={{ color: '#555555', fontSize: 11, marginTop: 1 }}>
             {selectedProvider?.name ?? 'AI'}
           </Text>
         </View>
 
         <Pressable
           onPress={() => setOptionsOpen((v) => !v)}
-          style={{ borderRadius: 11, borderWidth: 1, borderColor: optionsOpen ? 'rgba(245,208,66,0.25)' : 'rgba(255,255,255,0.07)', backgroundColor: optionsOpen ? 'rgba(245,208,66,0.07)' : 'rgba(255,255,255,0.04)', paddingHorizontal: 12, paddingVertical: 8 }}>
-          <Text style={{ color: optionsOpen ? '#F5D042' : '#9B9B9B', fontSize: 12 }}>
+          style={{ borderRadius: 11, borderWidth: 1, borderColor: optionsOpen ? 'rgba(246,211,101,0.25)' : 'rgba(255,255,255,0.07)', backgroundColor: optionsOpen ? 'rgba(246,211,101,0.07)' : 'rgba(255,255,255,0.04)', paddingHorizontal: 12, paddingVertical: 8 }}>
+          <Text style={{ color: optionsOpen ? '#F6D365' : '#A1A1A1', fontSize: 12 }}>
             {t('chatOptions')}
           </Text>
         </Pressable>
@@ -116,8 +116,8 @@ export default function ChatScreen() {
 
       {/* ─── Options panel ── */}
       {optionsOpen ? (
-        <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)', backgroundColor: '#0D0D0D', padding: 16 }}>
-          <Text style={{ color: '#636363', fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginBottom: 10 }}>MODÈLE</Text>
+        <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)', backgroundColor: '#111111', padding: 16 }}>
+          <Text style={{ color: '#555555', fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginBottom: 10 }}>MODÈLE</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {providers.map((p) => (
               <PillButton
@@ -128,7 +128,7 @@ export default function ChatScreen() {
               />
             ))}
           </View>
-          <Text style={{ color: '#636363', fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginTop: 14, marginBottom: 10 }}>MODE</Text>
+          <Text style={{ color: '#555555', fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginTop: 14, marginBottom: 10 }}>MODE</Text>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             <PillButton label={t('modeStandard')} active={mode === 'fast'} onPress={() => setMode('fast')} />
             <PillButton
@@ -152,11 +152,11 @@ export default function ChatScreen() {
           contentContainerStyle={{ padding: 16, gap: 10, paddingBottom: 12 }}>
           {messages.length === 0 ? (
             <View style={{ marginTop: 40, alignItems: 'center', gap: 8 }}>
-              <Text style={{ color: '#F5D042', fontSize: 24 }}>✦</Text>
-              <Text style={{ color: '#F2F2F2', fontSize: 16, fontWeight: '600', textAlign: 'center' }}>
+              <Text style={{ color: '#F6D365', fontSize: 24 }}>✦</Text>
+              <Text style={{ color: '#F5F5F5', fontSize: 16, fontWeight: '600', textAlign: 'center' }}>
                 {t('chatEmptyTitle')}
               </Text>
-              <Text style={{ color: '#636363', fontSize: 13, textAlign: 'center', lineHeight: 20, maxWidth: 280 }}>
+              <Text style={{ color: '#555555', fontSize: 13, textAlign: 'center', lineHeight: 20, maxWidth: 280 }}>
                 {t('chatEmptyBody')}
               </Text>
             </View>
@@ -178,9 +178,9 @@ export default function ChatScreen() {
 
           {/* Premium overlay (inline) */}
           {showPremiumOverlay ? (
-            <View style={{ marginBottom: 12, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)', backgroundColor: 'rgba(245,208,66,0.06)', padding: 14 }}>
-              <Text style={{ color: '#F2F2F2', fontSize: 14, fontWeight: '600' }}>{t('overlayTitle')}</Text>
-              <Text style={{ marginTop: 6, color: '#9B9B9B', fontSize: 13, lineHeight: 20 }}>{t('overlayBody')}</Text>
+            <View style={{ marginBottom: 12, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)', backgroundColor: 'rgba(246,211,101,0.06)', padding: 14 }}>
+              <Text style={{ color: '#F5F5F5', fontSize: 14, fontWeight: '600' }}>{t('overlayTitle')}</Text>
+              <Text style={{ marginTop: 6, color: '#A1A1A1', fontSize: 13, lineHeight: 20 }}>{t('overlayBody')}</Text>
               <View style={{ marginTop: 12, flexDirection: 'row', gap: 10 }}>
                 <PrimaryButton label={t('overlayUpgrade')} onPress={() => router.push('/(tabs)/premium')} />
                 <PrimaryButton label={t('overlayContinue')} onPress={() => setShowPremiumOverlay(false)} tone="ghost" />
@@ -188,24 +188,29 @@ export default function ChatScreen() {
             </View>
           ) : null}
 
-          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 10, borderRadius: 18, borderWidth: 1, borderColor: inputFocused ? 'rgba(245,208,66,0.35)' : 'rgba(255,255,255,0.07)', backgroundColor: '#0D0D0D', paddingHorizontal: 16, paddingVertical: 12 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 10, borderRadius: 18, borderWidth: 1, borderColor: inputFocused ? 'rgba(246,211,101,0.35)' : 'rgba(255,255,255,0.07)', backgroundColor: '#111111', paddingHorizontal: 16, paddingVertical: 12 }}>
             <TextInput
               value={draft}
               onChangeText={updateDraft}
               placeholder={t('chatInputPlaceholder')}
-              placeholderTextColor="#636363"
+              placeholderTextColor="#555555"
               multiline
-              style={{ flex: 1, color: '#F2F2F2', fontSize: 14, lineHeight: 22, maxHeight: 120, paddingVertical: 0 }}
+              style={{ flex: 1, color: '#F5F5F5', fontSize: 14, lineHeight: 22, maxHeight: 120, paddingVertical: 0 }}
               onFocus={() => setInputFocused(true)}
               onBlur={() => setInputFocused(false)}
               onSubmitEditing={handleSend}
               returnKeyType="send"
             />
+            {/* Mic button */}
+            <Pressable
+              style={{ width: 34, height: 34, borderRadius: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.04)', alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesome name="microphone" size={13} color="rgba(245,245,245,0.35)" />
+            </Pressable>
             <Pressable
               onPress={handleSend}
               disabled={isSending || !draft.trim()}
-              style={{ width: 36, height: 36, borderRadius: 11, backgroundColor: draft.trim() && !isSending ? '#F5D042' : 'rgba(255,255,255,0.07)', alignItems: 'center', justifyContent: 'center' }}>
-              <FontAwesome name="arrow-up" size={13} color={draft.trim() && !isSending ? '#050505' : '#636363'} />
+              style={{ width: 36, height: 36, borderRadius: 11, backgroundColor: draft.trim() && !isSending ? '#F6D365' : 'rgba(255,255,255,0.07)', alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesome name="arrow-up" size={13} color={draft.trim() && !isSending ? '#0B0B0B' : '#555555'} />
             </Pressable>
           </View>
         </BlurView>
@@ -222,10 +227,10 @@ function MessageBubble({ message, providers, locale }: { message: ChatMessage; p
   if (isUser) {
     return (
       <View style={{ alignSelf: 'flex-end', maxWidth: '80%' }}>
-        <View style={{ backgroundColor: '#F5D042', borderRadius: 18, borderBottomRightRadius: 4, paddingHorizontal: 16, paddingVertical: 12 }}>
-          <Text style={{ color: '#050505', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
+        <View style={{ backgroundColor: '#F6D365', borderRadius: 18, borderBottomRightRadius: 4, paddingHorizontal: 16, paddingVertical: 12 }}>
+          <Text style={{ color: '#0B0B0B', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
         </View>
-        <Text style={{ marginTop: 4, color: '#636363', fontSize: 11, textAlign: 'right' }}>
+        <Text style={{ marginTop: 4, color: '#555555', fontSize: 11, textAlign: 'right' }}>
           {formatMessageTime(locale, message.createdAt)}
         </Text>
       </View>
@@ -236,17 +241,17 @@ function MessageBubble({ message, providers, locale }: { message: ChatMessage; p
     <View style={{ alignSelf: 'flex-start', maxWidth: '86%' }}>
       {/* AI header: icon + model */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#0D0D0D', borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)', alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: '#F5D042', fontSize: 9 }}>✦</Text>
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#111111', borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#F6D365', fontSize: 9 }}>✦</Text>
         </View>
-        <Text style={{ color: '#F5D042', fontSize: 11, fontWeight: '600' }}>
+        <Text style={{ color: '#F6D365', fontSize: 11, fontWeight: '600' }}>
           {provider?.name ?? 'AI'}
         </Text>
       </View>
       <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, paddingVertical: 12 }}>
-        <Text style={{ color: '#F2F2F2', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
+        <Text style={{ color: '#F5F5F5', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
       </View>
-      <Text style={{ marginTop: 4, color: '#636363', fontSize: 11 }}>
+      <Text style={{ marginTop: 4, color: '#555555', fontSize: 11 }}>
         {formatMessageTime(locale, message.createdAt)}
       </Text>
     </View>
@@ -279,18 +284,19 @@ function TypingIndicator({ provider }: { provider: Provider | undefined }) {
   return (
     <View style={{ alignSelf: 'flex-start', maxWidth: '86%' }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#0D0D0D', borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)', alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: '#F5D042', fontSize: 9 }}>✦</Text>
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#111111', borderWidth: 1, borderColor: 'rgba(246,211,101,0.25)', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#F6D365', fontSize: 9 }}>✦</Text>
         </View>
-        <Text style={{ color: '#F5D042', fontSize: 11, fontWeight: '600' }}>{provider?.name ?? 'AI'}</Text>
+        <Text style={{ color: '#F6D365', fontSize: 11, fontWeight: '600' }}>{provider?.name ?? 'AI'}</Text>
       </View>
       <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, paddingVertical: 14 }}>
         <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
           {[dot1, dot2, dot3].map((d, i) => (
-            <Animated.View key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#636363', transform: [{ translateY: d }] }} />
+            <Animated.View key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#555555', transform: [{ translateY: d }] }} />
           ))}
         </View>
       </View>
     </View>
   );
 }
+
