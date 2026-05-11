@@ -71,13 +71,16 @@ export default function Sidebar() {
   const todayStr = today.toDateString();
   const yesterdayStr = new Date(today.getTime() - 86400000).toDateString();
 
-  const grouped = conversations.reduce<
-    Record<string, Conversation[]>
-  >((acc, conv) => {
-    const d = new Date(conv.updatedAt).toDateString();
-    const key =
-      d === todayStr ? "Aujourd'hui" : d === yesterdayStr ? 'Hier' : 'Plus ancien';
-    if (!acc[key]) acc[key] = [];
+  const grouped = conversations.reduce<Record<string, Conversation[]>>(
+    (acc, conv) => {
+      const d = new Date(conv.updatedAt).toDateString();
+      const key =
+        d === todayStr
+          ? "Aujourd'hui"
+          : d === yesterdayStr
+          ? 'Hier'
+          : 'Plus ancien';
+      if (!acc[key]) acc[key] = [];
     acc[key].push(conv);
     return acc;
   }, {});
@@ -90,50 +93,54 @@ export default function Sidebar() {
       <div
         ref={overlayRef}
         onClick={() => setSidebarOpen(false)}
-        className="fixed inset-0 z-40 bg-ink/60 backdrop-blur-xs opacity-0 pointer-events-none"
+        className="fixed inset-0 z-40 bg-ink/70 backdrop-blur-sm opacity-0 pointer-events-none"
       />
 
-      {/* Sidebar panel */}
+      {/* Sidebar panel — full-height, slightly wider on mobile for thumb reach */}
       <aside
         ref={sidebarRef}
         className={cn(
-          'fixed top-0 left-0 z-50 h-full w-72 flex flex-col',
-          'bg-ink/95 backdrop-blur-2xl border-r border-rim',
+          'fixed top-0 left-0 z-50 h-full flex flex-col',
+          'w-[min(80vw,288px)] sm:w-72',
+          'bg-ink/96 backdrop-blur-2xl border-r border-rim',
           'opacity-0',
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-rim mt-0">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-rim">
           <span className="font-display font-bold text-base text-snow">
             Chat<span className="text-gold">Line</span>
           </span>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-snow/40 hover:text-snow hover:bg-snow-dim transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-xl text-snow/40 hover:text-snow hover:bg-snow-dim transition-colors active:scale-95"
           >
             <CloseIcon />
           </button>
         </div>
 
         {/* New chat button */}
-        <div className="px-4 py-3">
+        <div className="px-3 sm:px-4 py-3">
           <Link
             href="/"
             onClick={() => setSidebarOpen(false)}
-            className="flex items-center gap-2.5 w-full px-3.5 py-2.5 rounded-xl border border-dashed border-rim hover:border-gold/30 text-snow/50 hover:text-snow/80 transition-all duration-200 text-sm group"
+            className="flex items-center gap-2.5 w-full px-3.5 py-3 rounded-xl border border-dashed border-rim hover:border-gold/30 text-snow/50 hover:text-snow/80 transition-all duration-200 text-sm group active:scale-[0.98]"
           >
-            <span className="w-5 h-5 rounded-md bg-snow-dim flex items-center justify-center group-hover:bg-gold/10 transition-colors">
+            <span className="w-6 h-6 rounded-lg bg-snow-dim flex items-center justify-center group-hover:bg-gold/10 transition-colors shrink-0">
               <PlusIcon />
             </span>
-            Nouveau chat
+            <span>Nouveau chat</span>
           </Link>
         </div>
 
-        {/* Conversations */}
-        <div className="flex-1 overflow-y-auto px-3 pb-4 space-y-4 scrollbar-thin">
+        {/* Conversations — scrollable */}
+        <div className="flex-1 overflow-y-auto px-2 sm:px-3 pb-4 space-y-4 scrollbar-none">
           {conversations.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-snow/25 text-sm">Aucune conversation</p>
+            <div className="flex flex-col items-center justify-center py-16 gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-snow-dim flex items-center justify-center">
+                <HistoryEmptyIcon />
+              </div>
+              <p className="text-snow/25 text-sm text-center">Aucune conversation</p>
             </div>
           ) : (
             groupOrder.map((group) => {
@@ -141,7 +148,7 @@ export default function Sidebar() {
               if (!convs || convs.length === 0) return null;
               return (
                 <div key={group}>
-                  <p className="text-xs text-snow/25 font-medium px-2 mb-1.5 uppercase tracking-wider">
+                  <p className="text-[10px] text-snow/25 font-semibold px-2 mb-2 uppercase tracking-widest">
                     {group}
                   </p>
                   <div className="space-y-0.5">
@@ -162,28 +169,28 @@ export default function Sidebar() {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-rim px-4 py-4 space-y-1">
+        <div className="border-t border-rim px-3 sm:px-4 py-4 space-y-1">
           <Link
             href="/premium"
             onClick={() => setSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gold/8 transition-colors group"
+            className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gold/8 transition-colors group active:scale-[0.98]"
           >
-            <span className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/15 transition-colors">
+            <span className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center group-hover:bg-gold/15 transition-colors shrink-0">
               <StarIcon />
             </span>
-            <div>
-              <p className="text-sm font-medium text-snow/80">Passer à Premium</p>
-              <p className="text-xs text-snow/35">Accès illimité + Claude + GPT Plus</p>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-snow/80 truncate">Premium</p>
+              <p className="text-xs text-snow/35 truncate">Illimité · Claude · GPT Plus</p>
             </div>
           </Link>
 
-          <button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl hover:bg-snow-dim transition-colors">
-            <span className="w-7 h-7 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
+          <button className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-snow-dim transition-colors active:scale-[0.98]">
+            <span className="w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
               <span className="text-gold text-xs font-bold">A</span>
             </span>
-            <div className="text-left">
-              <p className="text-sm font-medium text-snow/80">Mon compte</p>
-              <p className="text-xs text-snow/35">Paramètres</p>
+            <div className="text-left min-w-0">
+              <p className="text-sm font-medium text-snow/80 truncate">Mon compte</p>
+              <p className="text-xs text-snow/35 truncate">Paramètres</p>
             </div>
           </button>
         </div>
@@ -213,10 +220,11 @@ function ConversationItem({
           : 'hover:bg-snow-dim text-snow/60 hover:text-snow/90',
       )}
     >
-      <span className="flex-1 text-sm truncate">{conv.title}</span>
+      <span className="flex-1 text-sm truncate leading-snug">{conv.title}</span>
       <button
         onClick={onDelete}
-        className="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center rounded text-snow/30 hover:text-snow/70 hover:bg-snow-dim"
+        className="opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 flex items-center justify-center rounded-lg text-snow/30 hover:text-snow/70 hover:bg-snow-dim active:scale-90 shrink-0"
+        aria-label="Supprimer"
       >
         <TrashIcon />
       </button>
@@ -270,6 +278,15 @@ function TrashIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function HistoryEmptyIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="rgba(242,242,242,0.2)" strokeWidth="1.5" />
+      <path d="M10 6.5V10l2.5 2" stroke="rgba(242,242,242,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

@@ -108,66 +108,72 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 60% 40% at 50% 30%, rgba(245,208,66,0.05) 0%, transparent 65%)',
+            'radial-gradient(ellipse 70% 45% at 50% 25%, rgba(245,208,66,0.055) 0%, transparent 65%)',
         }}
       />
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-36 pb-8 px-4">
-        {/* Badge */}
-        <div
-          ref={badgeRef}
-          className="mb-8 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/5"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-          <span className="text-xs text-gold/80 font-medium tracking-wide">
-            Intelligence artificielle premium
-          </span>
-        </div>
-
-        {/* Heading */}
-        <h1
-          ref={headingRef}
-          className="text-center font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] mb-6 max-w-4xl"
-          aria-label="L'IA qui vous comprend vraiment."
-        >
-          {['L\'IA', 'qui', 'vous', 'comprend', 'vraiment.'].map((word, i) => (
-            <span
-              key={i}
-              className={`word inline-block mr-[0.3em] ${
-                word === 'vraiment.' ? 'text-gradient' : 'text-snow'
-              }`}
-            >
-              {word}
+      {/* Content — centred, max-width */}
+      <div className="flex-1 flex flex-col items-center justify-start pt-28 sm:pt-36 pb-8 px-4 sm:px-6">
+        <div className="w-full max-w-4xl flex flex-col items-center">
+          {/* Badge */}
+          <div
+            ref={badgeRef}
+            className="mb-6 sm:mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold/20 bg-gold/5"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+            <span className="text-[11px] sm:text-xs text-gold/80 font-medium tracking-wide">
+              Intelligence artificielle premium
             </span>
-          ))}
-        </h1>
+          </div>
 
-        {/* Subtitle */}
-        <p
-          ref={subtitleRef}
-          className="text-center text-snow/45 text-base sm:text-lg max-w-lg leading-relaxed mb-14"
-        >
-          Conversez, créez et explorez avec une intelligence artificielle
-          pensée dans les moindres détails.
-        </p>
+          {/* Heading */}
+          <h1
+            ref={headingRef}
+            className="text-center font-display font-bold text-[2.1rem] xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] mb-5 sm:mb-6"
+            aria-label="L'IA qui vous comprend vraiment."
+          >
+            {["L'IA", 'qui', 'vous', 'comprend', 'vraiment.'].map((word, i) => (
+              <span
+                key={i}
+                className={`word inline-block mr-[0.25em] sm:mr-[0.3em] ${
+                  word === 'vraiment.' ? 'text-gradient' : 'text-snow'
+                }`}
+              >
+                {word}
+              </span>
+            ))}
+          </h1>
 
-        {/* Prompt suggestions grid */}
-        <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-14">
-          {PROMPTS.map((p, i) => (
-            <PromptCard
-              key={p.title}
-              icon={p.icon}
-              title={p.title}
-              description={p.description}
-              delay={0.6 + i * 0.07}
-              onClick={() => handlePrompt(p.prompt)}
-            />
-          ))}
+          {/* Subtitle */}
+          <p
+            ref={subtitleRef}
+            className="text-center text-snow/45 text-sm sm:text-base md:text-lg max-w-sm sm:max-w-lg leading-relaxed mb-10 sm:mb-14 px-2"
+          >
+            Conversez, créez et explorez avec une intelligence artificielle
+            pensée dans les moindres détails.
+          </p>
+
+          {/* Prompt suggestions grid
+              Mobile: 1 col (2 cards visible to invite scroll)
+              Tablet: 2 cols
+              Desktop: 3 cols
+          */}
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 mb-10 sm:mb-14">
+            {PROMPTS.map((p, i) => (
+              <PromptCard
+                key={p.title}
+                icon={p.icon}
+                title={p.title}
+                description={p.description}
+                delay={0.6 + i * 0.07}
+                onClick={() => handlePrompt(p.prompt)}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Floating input */}
+      {/* Floating input — extra pb on mobile for bottom tab bar */}
       <ChatInput onSend={handleSend} placeholder="Posez n'importe quelle question…" />
     </div>
   );

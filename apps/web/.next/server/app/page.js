@@ -319,12 +319,31 @@ function PromptCard({ icon , title , description , onClick , delay =0  }) {
             ease: "power2.inOut"
         });
     };
+    const handleTouchStart = ()=>{
+        if (!cardRef.current) return;
+        gsap/* gsap.to */.p8.to(cardRef.current, {
+            scale: 0.97,
+            duration: 0.12,
+            ease: "power2.out"
+        });
+    };
+    const handleTouchEnd = ()=>{
+        if (!cardRef.current) return;
+        gsap/* gsap.to */.p8.to(cardRef.current, {
+            scale: 1,
+            duration: 0.2,
+            ease: "power2.out"
+        });
+    };
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)("button", {
         ref: cardRef,
         onClick: onClick,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
-        className: "group relative text-left p-4 rounded-2xl border border-rim bg-ink-surface hover:border-gold/20 transition-colors duration-200 cursor-pointer",
+        onTouchStart: handleTouchStart,
+        onTouchEnd: handleTouchEnd,
+        onTouchCancel: handleTouchEnd,
+        className: "group relative text-left p-4 sm:p-4.5 rounded-2xl border border-rim bg-ink-surface hover:border-gold/20 transition-colors duration-200 cursor-pointer",
         style: {
             willChange: "transform, opacity"
         },
@@ -491,56 +510,59 @@ function Hero() {
             /*#__PURE__*/ jsx_runtime_.jsx("div", {
                 className: "pointer-events-none absolute inset-0",
                 style: {
-                    background: "radial-gradient(ellipse 60% 40% at 50% 30%, rgba(245,208,66,0.05) 0%, transparent 65%)"
+                    background: "radial-gradient(ellipse 70% 45% at 50% 25%, rgba(245,208,66,0.055) 0%, transparent 65%)"
                 }
             }),
-            /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                className: "flex-1 flex flex-col items-center justify-start pt-36 pb-8 px-4",
-                children: [
-                    /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                        ref: badgeRef,
-                        className: "mb-8 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/5",
-                        children: [
-                            /*#__PURE__*/ jsx_runtime_.jsx("span", {
-                                className: "w-1.5 h-1.5 rounded-full bg-gold animate-pulse"
-                            }),
-                            /*#__PURE__*/ jsx_runtime_.jsx("span", {
-                                className: "text-xs text-gold/80 font-medium tracking-wide",
-                                children: "Intelligence artificielle premium"
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ jsx_runtime_.jsx("h1", {
-                        ref: headingRef,
-                        className: "text-center font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] mb-6 max-w-4xl",
-                        "aria-label": "L'IA qui vous comprend vraiment.",
-                        children: [
-                            "L'IA",
-                            "qui",
-                            "vous",
-                            "comprend",
-                            "vraiment."
-                        ].map((word, i)=>/*#__PURE__*/ jsx_runtime_.jsx("span", {
-                                className: `word inline-block mr-[0.3em] ${word === "vraiment." ? "text-gradient" : "text-snow"}`,
-                                children: word
-                            }, i))
-                    }),
-                    /*#__PURE__*/ jsx_runtime_.jsx("p", {
-                        ref: subtitleRef,
-                        className: "text-center text-snow/45 text-base sm:text-lg max-w-lg leading-relaxed mb-14",
-                        children: "Conversez, cr\xe9ez et explorez avec une intelligence artificielle pens\xe9e dans les moindres d\xe9tails."
-                    }),
-                    /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                        className: "w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-14",
-                        children: PROMPTS.map((p, i)=>/*#__PURE__*/ jsx_runtime_.jsx(PromptCard, {
-                                icon: p.icon,
-                                title: p.title,
-                                description: p.description,
-                                delay: 0.6 + i * 0.07,
-                                onClick: ()=>handlePrompt(p.prompt)
-                            }, p.title))
-                    })
-                ]
+            /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                className: "flex-1 flex flex-col items-center justify-start pt-28 sm:pt-36 pb-8 px-4 sm:px-6",
+                children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
+                    className: "w-full max-w-4xl flex flex-col items-center",
+                    children: [
+                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
+                            ref: badgeRef,
+                            className: "mb-6 sm:mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold/20 bg-gold/5",
+                            children: [
+                                /*#__PURE__*/ jsx_runtime_.jsx("span", {
+                                    className: "w-1.5 h-1.5 rounded-full bg-gold animate-pulse"
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx("span", {
+                                    className: "text-[11px] sm:text-xs text-gold/80 font-medium tracking-wide",
+                                    children: "Intelligence artificielle premium"
+                                })
+                            ]
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx("h1", {
+                            ref: headingRef,
+                            className: "text-center font-display font-bold text-[2.1rem] xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] mb-5 sm:mb-6",
+                            "aria-label": "L'IA qui vous comprend vraiment.",
+                            children: [
+                                "L'IA",
+                                "qui",
+                                "vous",
+                                "comprend",
+                                "vraiment."
+                            ].map((word, i)=>/*#__PURE__*/ jsx_runtime_.jsx("span", {
+                                    className: `word inline-block mr-[0.25em] sm:mr-[0.3em] ${word === "vraiment." ? "text-gradient" : "text-snow"}`,
+                                    children: word
+                                }, i))
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx("p", {
+                            ref: subtitleRef,
+                            className: "text-center text-snow/45 text-sm sm:text-base md:text-lg max-w-sm sm:max-w-lg leading-relaxed mb-10 sm:mb-14 px-2",
+                            children: "Conversez, cr\xe9ez et explorez avec une intelligence artificielle pens\xe9e dans les moindres d\xe9tails."
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                            className: "w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 mb-10 sm:mb-14",
+                            children: PROMPTS.map((p, i)=>/*#__PURE__*/ jsx_runtime_.jsx(PromptCard, {
+                                    icon: p.icon,
+                                    title: p.title,
+                                    description: p.description,
+                                    delay: 0.6 + i * 0.07,
+                                    onClick: ()=>handlePrompt(p.prompt)
+                                }, p.title))
+                        })
+                    ]
+                })
             }),
             /*#__PURE__*/ jsx_runtime_.jsx(chat_input/* default */.Z, {
                 onSend: handleSend,
@@ -560,7 +582,7 @@ function Hero() {
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [359,692,760,561], () => (__webpack_exec__(82)));
+var __webpack_exports__ = __webpack_require__.X(0, [359,692,785,561], () => (__webpack_exec__(82)));
 module.exports = __webpack_exports__;
 
 })();

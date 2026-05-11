@@ -67,14 +67,18 @@ export default function ChatInput({
   const canSend = value.trim().length > 0 && !disabled;
 
   return (
-    <div className="sticky bottom-0 left-0 right-0 z-20 px-4 pb-5 pt-3">
+    <div className="sticky bottom-0 left-0 right-0 z-20 px-3 sm:px-4 pt-3"
+      style={{ paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom, 1.25rem))' }}
+    >
+      {/* On mobile, add extra space for bottom tab bar */}
+      <div className="pb-14 md:pb-0">
       {/* Gradient fade above input */}
       <div className="absolute bottom-full left-0 right-0 h-16 bg-gradient-to-t from-ink to-transparent pointer-events-none" />
 
       <div className="max-w-3xl mx-auto relative">
         <div
           ref={wrapperRef}
-          className="flex items-end gap-3 px-4 py-3 rounded-2xl bg-ink-card border border-rim backdrop-blur-xl transition-none"
+          className="flex items-end gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-ink-card border border-rim backdrop-blur-xl transition-none"
           style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.07), 0 4px 24px rgba(0,0,0,0.5)' }}
         >
           <textarea
@@ -92,10 +96,10 @@ export default function ChatInput({
               'scrollbar-none overflow-hidden',
               disabled && 'opacity-50 cursor-not-allowed',
             )}
-            style={{ maxHeight: '180px' }}
+            style={{ maxHeight: '160px' }}
           />
 
-          {/* Model indicator */}
+          {/* Model indicator — hidden on mobile */}
           <div className="hidden sm:flex items-center gap-1.5 shrink-0 mb-0.5">
             <span className="text-[10px] text-snow/30 font-medium">GPT-5</span>
           </div>
@@ -116,9 +120,10 @@ export default function ChatInput({
           </button>
         </div>
 
-        <p className="text-center text-[10px] text-snow/20 mt-2">
+        <p className="text-center text-[10px] text-snow/20 mt-2 hidden sm:block">
           ChatLine peut faire des erreurs. Vérifiez les informations importantes.
         </p>
+      </div>
       </div>
     </div>
   );

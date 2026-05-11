@@ -488,7 +488,7 @@ function PremiumPage() {
         }
     }, []);
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-        className: "relative min-h-screen pt-28 pb-20 px-4",
+        className: "relative min-h-screen pt-24 sm:pt-28 pb-28 md:pb-20 px-4 sm:px-6",
         children: [
             /*#__PURE__*/ jsx_runtime_.jsx("div", {
                 className: "pointer-events-none fixed inset-0",
@@ -500,24 +500,24 @@ function PremiumPage() {
                 className: "relative max-w-5xl mx-auto",
                 children: [
                     /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                        className: "text-center mb-20",
+                        className: "text-center mb-12 sm:mb-20",
                         children: [
                             /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
                                 ref: badgeRef,
-                                className: "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/5 mb-8",
+                                className: "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/5 mb-6 sm:mb-8",
                                 children: [
                                     /*#__PURE__*/ jsx_runtime_.jsx("span", {
                                         className: "w-1.5 h-1.5 rounded-full bg-gold"
                                     }),
                                     /*#__PURE__*/ jsx_runtime_.jsx("span", {
-                                        className: "text-xs text-gold/80 font-medium tracking-wide",
+                                        className: "text-[11px] sm:text-xs text-gold/80 font-medium tracking-wide",
                                         children: "Acc\xe8s illimit\xe9 \xe0 l'IA premium"
                                     })
                                 ]
                             }),
                             /*#__PURE__*/ jsx_runtime_.jsx("h1", {
                                 ref: headingRef,
-                                className: "font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] mb-6",
+                                className: "font-display font-bold text-3xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] mb-4 sm:mb-6",
                                 children: [
                                     "L'IA",
                                     "sans",
@@ -529,20 +529,20 @@ function PremiumPage() {
                             }),
                             /*#__PURE__*/ jsx_runtime_.jsx("p", {
                                 ref: subRef,
-                                className: "text-snow/45 text-lg max-w-lg mx-auto leading-relaxed",
+                                className: "text-snow/45 text-sm sm:text-lg max-w-xs sm:max-w-lg mx-auto leading-relaxed",
                                 children: "Acc\xe9dez \xe0 des mod\xe8les de classe mondiale, sans attente ni limitation. Une exp\xe9rience pens\xe9e pour les professionnels exigeants."
                             })
                         ]
                     }),
                     /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                        className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-20",
+                        className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-12 sm:mb-20",
                         children: FEATURES.map((feat, i)=>/*#__PURE__*/ jsx_runtime_.jsx(FeatureCard, {
                                 ...feat,
                                 delay: 0.5 + i * 0.08
                             }, feat.title))
                     }),
                     /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                        className: "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-20",
+                        className: "grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto mb-12 sm:mb-20",
                         children: [
                             /*#__PURE__*/ jsx_runtime_.jsx(PricingCard, {
                                 plan: "free",
@@ -625,7 +625,7 @@ function PremiumPageWrapper() {
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [359,692,760], () => (__webpack_exec__(1848)));
+var __webpack_exports__ = __webpack_require__.X(0, [359,692,785], () => (__webpack_exec__(1848)));
 module.exports = __webpack_exports__;
 
 })();

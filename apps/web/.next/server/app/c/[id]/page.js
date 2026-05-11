@@ -532,10 +532,10 @@ function ChatUI({ conversationId  }) {
     }
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
         ref: containerRef,
-        className: "flex flex-col h-screen pt-20",
+        className: "flex flex-col h-screen pt-16 sm:pt-20",
         children: [
             /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                className: "flex-1 overflow-y-auto py-6 space-y-5",
+                className: "flex-1 overflow-y-auto py-4 sm:py-6 space-y-4 sm:space-y-5 pb-16 md:pb-0",
                 children: messages.length === 0 ? /*#__PURE__*/ jsx_runtime_.jsx("div", {
                     className: "flex items-center justify-center h-full",
                     children: /*#__PURE__*/ jsx_runtime_.jsx("p", {
@@ -574,7 +574,7 @@ function ChatUI({ conversationId  }) {
 var __webpack_require__ = require("../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [359,692,760,561], () => (__webpack_exec__(8277)));
+var __webpack_exports__ = __webpack_require__.X(0, [359,692,785,561], () => (__webpack_exec__(8277)));
 module.exports = __webpack_exports__;
 
 })();

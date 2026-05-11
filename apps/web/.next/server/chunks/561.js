@@ -77,60 +77,66 @@ function ChatInput({ onSend , disabled =false , placeholder ="Posez votre questi
         }
     };
     const canSend = value.trim().length > 0 && !disabled;
-    return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "sticky bottom-0 left-0 right-0 z-20 px-4 pb-5 pt-3",
-        children: [
-            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                className: "absolute bottom-full left-0 right-0 h-16 bg-gradient-to-t from-ink to-transparent pointer-events-none"
-            }),
-            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                className: "max-w-3xl mx-auto relative",
-                children: [
-                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                        ref: wrapperRef,
-                        className: "flex items-end gap-3 px-4 py-3 rounded-2xl bg-ink-card border border-rim backdrop-blur-xl transition-none",
-                        style: {
-                            boxShadow: "0 0 0 1px rgba(255,255,255,0.07), 0 4px 24px rgba(0,0,0,0.5)"
-                        },
-                        children: [
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("textarea", {
-                                ref: textareaRef,
-                                value: value,
-                                onChange: (e)=>setValue(e.target.value),
-                                onKeyDown: handleKeyDown,
-                                onFocus: ()=>setFocused(true),
-                                onBlur: ()=>setFocused(false),
-                                placeholder: placeholder,
-                                disabled: disabled,
-                                rows: 1,
-                                className: (0,_lib_cn__WEBPACK_IMPORTED_MODULE_2__.cn)("flex-1 resize-none bg-transparent text-snow/90 placeholder-snow/25 text-sm leading-relaxed outline-none", "scrollbar-none overflow-hidden", disabled && "opacity-50 cursor-not-allowed"),
-                                style: {
-                                    maxHeight: "180px"
-                                }
-                            }),
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                                className: "hidden sm:flex items-center gap-1.5 shrink-0 mb-0.5",
-                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("span", {
-                                    className: "text-[10px] text-snow/30 font-medium",
-                                    children: "GPT-5"
+    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
+        className: "sticky bottom-0 left-0 right-0 z-20 px-3 sm:px-4 pt-3",
+        style: {
+            paddingBottom: "max(1.25rem, env(safe-area-inset-bottom, 1.25rem))"
+        },
+        children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+            className: "pb-14 md:pb-0",
+            children: [
+                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
+                    className: "absolute bottom-full left-0 right-0 h-16 bg-gradient-to-t from-ink to-transparent pointer-events-none"
+                }),
+                /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                    className: "max-w-3xl mx-auto relative",
+                    children: [
+                        /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                            ref: wrapperRef,
+                            className: "flex items-end gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-ink-card border border-rim backdrop-blur-xl transition-none",
+                            style: {
+                                boxShadow: "0 0 0 1px rgba(255,255,255,0.07), 0 4px 24px rgba(0,0,0,0.5)"
+                            },
+                            children: [
+                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("textarea", {
+                                    ref: textareaRef,
+                                    value: value,
+                                    onChange: (e)=>setValue(e.target.value),
+                                    onKeyDown: handleKeyDown,
+                                    onFocus: ()=>setFocused(true),
+                                    onBlur: ()=>setFocused(false),
+                                    placeholder: placeholder,
+                                    disabled: disabled,
+                                    rows: 1,
+                                    className: (0,_lib_cn__WEBPACK_IMPORTED_MODULE_2__.cn)("flex-1 resize-none bg-transparent text-snow/90 placeholder-snow/25 text-sm leading-relaxed outline-none", "scrollbar-none overflow-hidden", disabled && "opacity-50 cursor-not-allowed"),
+                                    style: {
+                                        maxHeight: "160px"
+                                    }
+                                }),
+                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
+                                    className: "hidden sm:flex items-center gap-1.5 shrink-0 mb-0.5",
+                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("span", {
+                                        className: "text-[10px] text-snow/30 font-medium",
+                                        children: "GPT-5"
+                                    })
+                                }),
+                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
+                                    onClick: handleSend,
+                                    disabled: !canSend,
+                                    className: (0,_lib_cn__WEBPACK_IMPORTED_MODULE_2__.cn)("shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-150", canSend ? "bg-gold text-ink hover:brightness-105 hover:scale-105 active:scale-95" : "bg-snow-dim text-snow/20 cursor-not-allowed"),
+                                    "aria-label": "Envoyer",
+                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(SendIcon, {})
                                 })
-                            }),
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
-                                onClick: handleSend,
-                                disabled: !canSend,
-                                className: (0,_lib_cn__WEBPACK_IMPORTED_MODULE_2__.cn)("shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-150", canSend ? "bg-gold text-ink hover:brightness-105 hover:scale-105 active:scale-95" : "bg-snow-dim text-snow/20 cursor-not-allowed"),
-                                "aria-label": "Envoyer",
-                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(SendIcon, {})
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
-                        className: "text-center text-[10px] text-snow/20 mt-2",
-                        children: "ChatLine peut faire des erreurs. V\xe9rifiez les informations importantes."
-                    })
-                ]
-            })
-        ]
+                            ]
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
+                            className: "text-center text-[10px] text-snow/20 mt-2 hidden sm:block",
+                            children: "ChatLine peut faire des erreurs. V\xe9rifiez les informations importantes."
+                        })
+                    ]
+                })
+            ]
+        })
     });
 }
 function SendIcon() {

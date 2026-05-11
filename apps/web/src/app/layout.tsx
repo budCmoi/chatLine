@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     "L'assistant IA le plus élégant. Conversez, créez et explorez avec une intelligence artificielle conçue dans les moindres détails.",
   manifest: '/manifest.json',
   themeColor: '#050505',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   icons: {
     icon: [
       { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },

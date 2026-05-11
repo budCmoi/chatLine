@@ -49,7 +49,7 @@ function PremiumPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen pt-28 pb-20 px-4">
+    <div className="relative min-h-screen pt-24 sm:pt-28 pb-28 md:pb-20 px-4 sm:px-6">
       {/* Ambient glow */}
       <div
         className="pointer-events-none fixed inset-0"
@@ -61,22 +61,22 @@ function PremiumPage() {
 
       <div className="relative max-w-5xl mx-auto">
         {/* Hero section */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 sm:mb-20">
           <div
             ref={badgeRef}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/5 mb-8"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/5 mb-6 sm:mb-8"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-            <span className="text-xs text-gold/80 font-medium tracking-wide">
+            <span className="text-[11px] sm:text-xs text-gold/80 font-medium tracking-wide">
               Accès illimité à l'IA premium
             </span>
           </div>
 
           <h1
             ref={headingRef}
-            className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] mb-6"
+            className="font-display font-bold text-3xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] mb-4 sm:mb-6"
           >
-            {['L\'IA', 'sans', 'compromis.'].map((word, i) => (
+            {["L'IA", 'sans', 'compromis.'].map((word, i) => (
               <span
                 key={i}
                 className={`word inline-block mr-[0.25em] ${word === 'sans' ? 'text-gradient' : 'text-snow'}`}
@@ -88,22 +88,22 @@ function PremiumPage() {
 
           <p
             ref={subRef}
-            className="text-snow/45 text-lg max-w-lg mx-auto leading-relaxed"
+            className="text-snow/45 text-sm sm:text-lg max-w-xs sm:max-w-lg mx-auto leading-relaxed"
           >
             Accédez à des modèles de classe mondiale, sans attente ni limitation.
             Une expérience pensée pour les professionnels exigeants.
           </p>
         </div>
 
-        {/* Feature grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
+        {/* Feature grid — 2 cols on mobile, 4 on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-12 sm:mb-20">
           {FEATURES.map((feat, i) => (
             <FeatureCard key={feat.title} {...feat} delay={0.5 + i * 0.08} />
           ))}
         </div>
 
         {/* Pricing cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto mb-12 sm:mb-20">
           <PricingCard plan="free" delay={0.7} />
           <PricingCard plan="premium" delay={0.8} />
         </div>
