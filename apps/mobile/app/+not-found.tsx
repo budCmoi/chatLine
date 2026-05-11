@@ -12,11 +12,11 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: 'Not found', headerStyle: { backgroundColor: palette.background }, headerTintColor: palette.textPrimary }} />
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.background, paddingHorizontal: 24 }}>
-        <Text style={{ color: palette.primary, fontFamily: 'SpaceMono', fontSize: 12, letterSpacing: 2 }}>{t('notFoundCode')}</Text>
-        <Text style={{ marginTop: 16, textAlign: 'center', color: palette.textPrimary, fontFamily: 'SpaceMono', fontSize: 24, lineHeight: 34 }}>
+        <Text style={{ color: palette.primary, fontSize: 11, fontWeight: '600', letterSpacing: 2 }}>{t('notFoundCode')}</Text>
+        <Text style={{ marginTop: 16, textAlign: 'center', color: palette.textPrimary, fontSize: 24, fontWeight: '700', lineHeight: 34 }}>
           {t('notFoundTitle')}
         </Text>
-        <Text style={{ marginTop: 12, maxWidth: 280, textAlign: 'center', color: palette.textSecondary, fontFamily: 'SpaceMono', fontSize: 13, lineHeight: 22 }}>
+        <Text style={{ marginTop: 12, maxWidth: 280, textAlign: 'center', color: palette.textSecondary, fontSize: 13, lineHeight: 22 }}>
           {t('notFoundBody')}
         </Text>
 
@@ -24,14 +24,14 @@ export default function NotFoundScreen() {
           href="/"
           style={{
             marginTop: 24,
-            borderRadius: 999,
+            borderRadius: 14,
             borderWidth: 1,
             borderColor: palette.primary,
             backgroundColor: palette.primary,
             paddingHorizontal: 18,
             paddingVertical: 12,
           }}>
-          <Text style={{ color: palette.primaryText, fontFamily: 'SpaceMono', fontSize: 11, letterSpacing: 1.4 }}>{t('goHome').toUpperCase()}</Text>
+          <Text style={{ color: palette.primaryText, fontSize: 13, fontWeight: '600' }}>{t('goHome')}</Text>
         </Link>
       </View>
     </>

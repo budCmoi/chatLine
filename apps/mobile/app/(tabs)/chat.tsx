@@ -1,7 +1,9 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+﻿import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { BlurView } from 'expo-blur';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
 import {
+  Animated,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -10,338 +12,285 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FadeInView } from '../../components/fade-in-view';
 import { useDrawerControls } from '../../components/app-shell';
-import {
-  EmptyState,
-  PageHeader,
-  PillButton,
-  PrimaryButton,
-  ScreenContainer,
-  SectionCard,
-  StatusBadge,
-} from '../../components/ui';
+import { PillButton, PrimaryButton } from '../../components/ui';
 import { formatMessageTime, useI18n } from '../../lib/localization';
 import { useAppPalette } from '../../lib/theme-palette';
 import { useAssistantStore } from '../../stores/assistant-store';
 import type { ChatMessage, Provider } from '../../types/assistant';
 
+const FREE_LIMIT = 20;
+
 export default function ChatScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ prompt?: string }>();
   const { openDrawer } = useDrawerControls();
   const { locale, t } = useI18n();
   const palette = useAppPalette();
-  const conversations = useAssistantStore((state) => state.conversations);
-  const messagesByConversation = useAssistantStore((state) => state.messagesByConversation);
-  const activeConversationId = useAssistantStore((state) => state.activeConversationId);
-  const providers = useAssistantStore((state) => state.providers);
-  const selectedProviderId = useAssistantStore((state) => state.selectedProviderId);
-  const mode = useAssistantStore((state) => state.mode);
-  const draft = useAssistantStore((state) => state.draft);
-  const isSending = useAssistantStore((state) => state.isSending);
-  const subscriptionPlan = useAssistantStore((state) => state.subscriptionPlan);
-  const freeRequestsUsed = useAssistantStore((state) => state.freeRequestsUsed);
-  const upgradePromptDismissed = useAssistantStore((state) => state.upgradePromptDismissed);
-  const updateDraft = useAssistantStore((state) => state.updateDraft);
-  const sendMessage = useAssistantStore((state) => state.sendMessage);
-  const setActiveProvider = useAssistantStore((state) => state.setActiveProvider);
-  const setMode = useAssistantStore((state) => state.setMode);
-  const dismissUpgradePrompt = useAssistantStore((state) => state.dismissUpgradePrompt);
+  const scrollRef = useRef<ScrollView>(null);
+
+  const conversations        = useAssistantStore((s) => s.conversations);
+  const messagesByConversation = useAssistantStore((s) => s.messagesByConversation);
+  const activeConversationId = useAssistantStore((s) => s.activeConversationId);
+  const providers            = useAssistantStore((s) => s.providers);
+  const selectedProviderId   = useAssistantStore((s) => s.selectedProviderId);
+  const mode                 = useAssistantStore((s) => s.mode);
+  const draft                = useAssistantStore((s) => s.draft);
+  const isSending            = useAssistantStore((s) => s.isSending);
+  const subscriptionPlan     = useAssistantStore((s) => s.subscriptionPlan);
+  const freeRequestsUsed     = useAssistantStore((s) => s.freeRequestsUsed);
+  const updateDraft          = useAssistantStore((s) => s.updateDraft);
+  const sendMessage          = useAssistantStore((s) => s.sendMessage);
+  const setActiveProvider    = useAssistantStore((s) => s.setActiveProvider);
+  const setMode              = useAssistantStore((s) => s.setMode);
+
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [showPremiumOverlay, setShowPremiumOverlay] = useState(false);
 
-  const activeConversation = conversations.find((conversation) => conversation.id === activeConversationId) ?? null;
+  const activeConversation = conversations.find((c) => c.id === activeConversationId) ?? null;
   const messages = activeConversationId ? messagesByConversation[activeConversationId] ?? [] : [];
-  const selectedProvider = providers.find((provider) => provider.id === selectedProviderId) ?? providers[0];
-  const showUpgradePrompt = subscriptionPlan === 'free' && freeRequestsUsed >= 5 && !upgradePromptDismissed;
+  const selectedProvider = providers.find((p) => p.id === selectedProviderId) ?? providers[0];
+  const isPremium = subscriptionPlan === 'premium';
 
-  const requestCounterLabel = subscriptionPlan === 'premium' ? t('premiumBadge') : freeRequestsUsed >= 5 ? '5+/5' : `${freeRequestsUsed}/5`;
+  // Pre-fill draft from navigation params (home prompt cards)
+  useEffect(() => {
+    if (params.prompt) {
+      updateDraft(params.prompt);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.prompt]);
+
+  // Show premium overlay silently when limit hit
+  useEffect(() => {
+    if (!isPremium && freeRequestsUsed >= FREE_LIMIT) {
+      setShowPremiumOverlay(true);
+    }
+  }, [freeRequestsUsed, isPremium]);
+
+  // Auto-scroll on new messages
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 80);
+    }
+  }, [messages.length, isSending]);
+
+  function handleSend() {
+    if (!draft.trim()) return;
+    if (!isPremium && freeRequestsUsed >= FREE_LIMIT) {
+      setShowPremiumOverlay(true);
+      return;
+    }
+    void sendMessage();
+  }
 
   return (
-    <ScreenContainer
-      footer={
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-          {showUpgradePrompt ? (
-            <View
-              style={{
-                marginBottom: 12,
-                borderRadius: 24,
-                borderWidth: 1,
-                borderColor: palette.primary,
-                backgroundColor: 'rgba(245,208,66,0.06)',
-                padding: 14,
-              }}>
-              <Text
-                style={{
-                  color: palette.textPrimary,
-                  fontFamily: 'SpaceMono',
-                  fontSize: 13,
-                  lineHeight: 20,
-                }}>
-                {t('overlayTitle')}
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#050505' }}>
+      {/* ─── Header bar ── */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)' }}>
+        <Pressable
+          onPress={openDrawer}
+          style={{ width: 38, height: 38, borderRadius: 11, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.04)', alignItems: 'center', justifyContent: 'center', marginRight: 12 }}>
+          <FontAwesome name="bars" size={13} color="#9B9B9B" />
+        </Pressable>
+
+        <View style={{ flex: 1 }}>
+          <Text numberOfLines={1} style={{ color: '#F2F2F2', fontSize: 14, fontWeight: '600' }}>
+            {activeConversation?.title ?? t('startChat')}
+          </Text>
+          <Text style={{ color: '#636363', fontSize: 11, marginTop: 1 }}>
+            {selectedProvider?.name ?? 'AI'}
+          </Text>
+        </View>
+
+        <Pressable
+          onPress={() => setOptionsOpen((v) => !v)}
+          style={{ borderRadius: 11, borderWidth: 1, borderColor: optionsOpen ? 'rgba(245,208,66,0.25)' : 'rgba(255,255,255,0.07)', backgroundColor: optionsOpen ? 'rgba(245,208,66,0.07)' : 'rgba(255,255,255,0.04)', paddingHorizontal: 12, paddingVertical: 8 }}>
+          <Text style={{ color: optionsOpen ? '#F5D042' : '#9B9B9B', fontSize: 12 }}>
+            {t('chatOptions')}
+          </Text>
+        </Pressable>
+      </View>
+
+      {/* ─── Options panel ── */}
+      {optionsOpen ? (
+        <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)', backgroundColor: '#0D0D0D', padding: 16 }}>
+          <Text style={{ color: '#636363', fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginBottom: 10 }}>MODÈLE</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {providers.map((p) => (
+              <PillButton
+                key={p.id}
+                label={`${p.name}`}
+                active={p.id === selectedProviderId}
+                onPress={() => setActiveProvider(p.id)}
+              />
+            ))}
+          </View>
+          <Text style={{ color: '#636363', fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginTop: 14, marginBottom: 10 }}>MODE</Text>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <PillButton label={t('modeStandard')} active={mode === 'fast'} onPress={() => setMode('fast')} />
+            <PillButton
+              label={t('modeExpert')}
+              active={mode === 'expert' && isPremium}
+              onPress={() => isPremium ? setMode('expert') : router.push('/(tabs)/premium')}
+              disabled={!isPremium}
+            />
+          </View>
+        </View>
+      ) : null}
+
+      {/* ─── Messages ── */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={0}>
+        <ScrollView
+          ref={scrollRef}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ padding: 16, gap: 10, paddingBottom: 12 }}>
+          {messages.length === 0 ? (
+            <View style={{ marginTop: 40, alignItems: 'center', gap: 8 }}>
+              <Text style={{ color: '#F5D042', fontSize: 24 }}>✦</Text>
+              <Text style={{ color: '#F2F2F2', fontSize: 16, fontWeight: '600', textAlign: 'center' }}>
+                {t('chatEmptyTitle')}
               </Text>
-              <Text
-                style={{
-                  marginTop: 8,
-                  color: palette.textSecondary,
-                  fontFamily: 'SpaceMono',
-                  fontSize: 12,
-                  lineHeight: 20,
-                }}>
-                {t('overlayBody')}
+              <Text style={{ color: '#636363', fontSize: 13, textAlign: 'center', lineHeight: 20, maxWidth: 280 }}>
+                {t('chatEmptyBody')}
               </Text>
+            </View>
+          ) : (
+            messages.map((msg) => (
+              <MessageBubble key={msg.id} message={msg} providers={providers} locale={locale} />
+            ))
+          )}
+
+          {/* Typing indicator */}
+          {isSending ? <TypingIndicator provider={selectedProvider} /> : null}
+        </ScrollView>
+
+        {/* ─── Input area ── */}
+        <BlurView
+          intensity={28}
+          tint="dark"
+          style={{ borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.06)', paddingHorizontal: 16, paddingTop: 12, paddingBottom: Platform.OS === 'ios' ? 28 : 16, overflow: 'hidden' }}>
+
+          {/* Premium overlay (inline) */}
+          {showPremiumOverlay ? (
+            <View style={{ marginBottom: 12, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)', backgroundColor: 'rgba(245,208,66,0.06)', padding: 14 }}>
+              <Text style={{ color: '#F2F2F2', fontSize: 14, fontWeight: '600' }}>{t('overlayTitle')}</Text>
+              <Text style={{ marginTop: 6, color: '#9B9B9B', fontSize: 13, lineHeight: 20 }}>{t('overlayBody')}</Text>
               <View style={{ marginTop: 12, flexDirection: 'row', gap: 10 }}>
                 <PrimaryButton label={t('overlayUpgrade')} onPress={() => router.push('/(tabs)/premium')} />
-                <PrimaryButton label={t('overlayContinue')} onPress={dismissUpgradePrompt} tone="ghost" />
+                <PrimaryButton label={t('overlayContinue')} onPress={() => setShowPremiumOverlay(false)} tone="ghost" />
               </View>
             </View>
           ) : null}
 
-          <View
-            style={{
-              borderRadius: 24,
-              borderWidth: 1,
-              borderColor: palette.border,
-              backgroundColor: 'rgba(0,0,0,0.60)',
-              padding: 14,
-            }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 10, borderRadius: 18, borderWidth: 1, borderColor: inputFocused ? 'rgba(245,208,66,0.35)' : 'rgba(255,255,255,0.07)', backgroundColor: '#0D0D0D', paddingHorizontal: 16, paddingVertical: 12 }}>
             <TextInput
               value={draft}
               onChangeText={updateDraft}
               placeholder={t('chatInputPlaceholder')}
-              placeholderTextColor={palette.textMuted}
+              placeholderTextColor="#636363"
               multiline
-              style={{
-                minHeight: 88,
-                color: palette.textPrimary,
-                fontFamily: 'SpaceMono',
-                fontSize: 13,
-                lineHeight: 22,
-              }}
+              style={{ flex: 1, color: '#F2F2F2', fontSize: 14, lineHeight: 22, maxHeight: 120, paddingVertical: 0 }}
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
+              onSubmitEditing={handleSend}
+              returnKeyType="send"
             />
-            <View
-              style={{
-                marginTop: 12,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 12,
-                borderTopWidth: 1,
-                borderTopColor: palette.border,
-                paddingTop: 12,
-              }}>
-              <View>
-                <Text
-                  style={{
-                    color: palette.textMuted,
-                    fontFamily: 'SpaceMono',
-                    fontSize: 10,
-                    letterSpacing: 1.2,
-                  }}>
-                  {t('overlayCounter').toUpperCase()}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: 4,
-                    color: palette.textSecondary,
-                    fontFamily: 'SpaceMono',
-                    fontSize: 12,
-                  }}>
-                  {requestCounterLabel}
-                </Text>
-              </View>
-              <PrimaryButton
-                label={isSending ? 'RUNNING' : 'SEND'}
-                onPress={() => void sendMessage()}
-                icon="arrow-up"
-              />
-            </View>
+            <Pressable
+              onPress={handleSend}
+              disabled={isSending || !draft.trim()}
+              style={{ width: 36, height: 36, borderRadius: 11, backgroundColor: draft.trim() && !isSending ? '#F5D042' : 'rgba(255,255,255,0.07)', alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesome name="arrow-up" size={13} color={draft.trim() && !isSending ? '#050505' : '#636363'} />
+            </Pressable>
           </View>
-        </KeyboardAvoidingView>
-      }>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 28 }}>
-        <FadeInView>
-          <PageHeader
-            onMenuPress={openDrawer}
-            eyebrow={selectedProvider?.name.toUpperCase() ?? t('freeProvidersTitle').toUpperCase()}
-            title={activeConversation?.title ?? t('startChat')}
-            subtitle={activeConversation?.preview ?? t('chatEmptyBody')}
-            rightSlot={
-              <Pressable
-                onPress={() => setOptionsOpen((current) => !current)}
-                style={{
-                  borderRadius: 999,
-                  borderWidth: 1,
-                  borderColor: palette.border,
-                  backgroundColor: palette.surfaceRaised,
-                  paddingHorizontal: 14,
-                  paddingVertical: 11,
-                }}>
-                <Text
-                  style={{
-                    color: palette.textPrimary,
-                    fontFamily: 'SpaceMono',
-                    fontSize: 11,
-                    letterSpacing: 1.2,
-                  }}>
-                  {t('chatOptions').toUpperCase()}
-                </Text>
-              </Pressable>
-            }
-          />
-        </FadeInView>
-
-        <FadeInView delay={50}>
-          <View style={{ marginBottom: 16, flexDirection: 'row', gap: 10 }}>
-            <StatusBadge label={subscriptionPlan === 'premium' ? t('premiumBadge') : t('freeBadge')} tone={subscriptionPlan === 'premium' ? 'secondary' : 'primary'} />
-            <StatusBadge label={mode === 'expert' ? t('modeExpert') : t('modeStandard')} tone="muted" />
-          </View>
-        </FadeInView>
-
-        {optionsOpen ? (
-          <FadeInView delay={80}>
-            <SectionCard title={t('chatOptions').toUpperCase()} subtitle={t('chatOptionsSubtitle')}>
-              <Text
-                style={{
-                  marginBottom: 10,
-                  color: palette.textMuted,
-                  fontFamily: 'SpaceMono',
-                  fontSize: 11,
-                  letterSpacing: 1.2,
-                }}>
-                {t('freeProvidersTitle').toUpperCase()}
-              </Text>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                {providers.map((provider) => (
-                  <PillButton
-                    key={provider.id}
-                    label={`${provider.name} / ${provider.vendor}`}
-                    active={provider.id === selectedProviderId}
-                    onPress={() => setActiveProvider(provider.id)}
-                  />
-                ))}
-              </View>
-
-              <View style={{ marginTop: 14, flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                <PillButton label={t('modeStandard')} active={mode === 'fast'} onPress={() => setMode('fast')} />
-                <PillButton
-                  label={`${t('modeExpert')} / ${t('expertLocked')}`}
-                  active={mode === 'expert' && subscriptionPlan === 'premium'}
-                  onPress={() => (subscriptionPlan === 'premium' ? setMode('expert') : router.push('/(tabs)/premium'))}
-                  disabled={subscriptionPlan === 'free'}
-                />
-              </View>
-            </SectionCard>
-          </FadeInView>
-        ) : null}
-
-        {messages.length > 0 ? (
-          <FadeInView delay={120}>
-            <View style={{ gap: 12 }}>
-              {messages.map((message) => (
-                <MessageBubble key={message.id} message={message} providers={providers} locale={locale} />
-              ))}
-
-              {isSending ? (
-                <View
-                  style={{
-                    maxWidth: '88%',
-                    borderRadius: 26,
-                    borderWidth: 1,
-                    borderColor: palette.border,
-                    backgroundColor: palette.surface,
-                    padding: 14,
-                  }}>
-                  <Text
-                    style={{
-                      color: palette.textMuted,
-                      fontFamily: 'SpaceMono',
-                      fontSize: 10,
-                      letterSpacing: 1.2,
-                    }}>
-                    STREAM
-                  </Text>
-                  <Text
-                    style={{
-                      marginTop: 6,
-                      color: palette.textSecondary,
-                      fontFamily: 'SpaceMono',
-                      fontSize: 12,
-                      lineHeight: 20,
-                    }}>
-                    {selectedProvider?.name} is preparing a reply...
-                  </Text>
-                </View>
-              ) : null}
-            </View>
-          </FadeInView>
-        ) : (
-          <FadeInView delay={120}>
-            <EmptyState
-              title={t('chatEmptyTitle')}
-              body={t('chatEmptyBody')}
-              action={<PrimaryButton label={t('startChat')} onPress={() => updateDraft('Plan a professional mobile AI assistant.')} tone="ghost" />}
-            />
-          </FadeInView>
-        )}
-      </ScrollView>
-    </ScreenContainer>
+        </BlurView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
-function MessageBubble({
-  message,
-  providers,
-  locale,
-}: {
-  message: ChatMessage;
-  providers: Provider[];
-  locale: 'en' | 'fr';
-}) {
-  const palette = useAppPalette();
+// ─── Message bubble ───────────────────────────────────────────────────────────
+function MessageBubble({ message, providers, locale }: { message: ChatMessage; providers: Provider[]; locale: 'en' | 'fr' }) {
   const isUser = message.role === 'user';
-  const provider = providers.find((item) => item.id === message.providerId);
+  const provider = providers.find((p) => p.id === message.providerId);
+
+  if (isUser) {
+    return (
+      <View style={{ alignSelf: 'flex-end', maxWidth: '80%' }}>
+        <View style={{ backgroundColor: '#F5D042', borderRadius: 18, borderBottomRightRadius: 4, paddingHorizontal: 16, paddingVertical: 12 }}>
+          <Text style={{ color: '#050505', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
+        </View>
+        <Text style={{ marginTop: 4, color: '#636363', fontSize: 11, textAlign: 'right' }}>
+          {formatMessageTime(locale, message.createdAt)}
+        </Text>
+      </View>
+    );
+  }
 
   return (
-    <View
-      style={{
-        alignSelf: isUser ? 'flex-end' : 'flex-start',
-        maxWidth: isUser ? '88%' : '92%',
-        borderRadius: 24,
-        borderWidth: 1,
-        borderColor: isUser ? 'rgba(245,208,66,0.28)' : palette.border,
-        backgroundColor: isUser ? 'rgba(245,208,66,0.09)' : palette.surface,
-        padding: 14,
-      }}>
-      <Text
-        style={{
-          color: isUser ? palette.primary : palette.textMuted,
-          fontFamily: 'SpaceMono',
-          fontSize: 10,
-          letterSpacing: 1.2,
-        }}>
-        {isUser ? 'YOU' : (provider?.name ?? 'AI CORE').toUpperCase()}
-      </Text>
-      <Text
-        style={{
-          marginTop: 8,
-          color: isUser ? palette.textPrimary : palette.textPrimary,
-          fontFamily: 'SpaceMono',
-          fontSize: 13,
-          lineHeight: 22,
-        }}>
-        {message.content}
-      </Text>
-      <Text
-        style={{
-          marginTop: 10,
-          color: isUser ? 'rgba(245,208,66,0.50)' : palette.textMuted,
-          fontFamily: 'SpaceMono',
-          fontSize: 10,
-          letterSpacing: 1.2,
-        }}>
+    <View style={{ alignSelf: 'flex-start', maxWidth: '86%' }}>
+      {/* AI header: icon + model */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#0D0D0D', borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#F5D042', fontSize: 9 }}>✦</Text>
+        </View>
+        <Text style={{ color: '#F5D042', fontSize: 11, fontWeight: '600' }}>
+          {provider?.name ?? 'AI'}
+        </Text>
+      </View>
+      <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, paddingVertical: 12 }}>
+        <Text style={{ color: '#F2F2F2', fontSize: 14, lineHeight: 22 }}>{message.content}</Text>
+      </View>
+      <Text style={{ marginTop: 4, color: '#636363', fontSize: 11 }}>
         {formatMessageTime(locale, message.createdAt)}
       </Text>
+    </View>
+  );
+}
+
+// ─── Typing indicator (3 bouncing dots) ──────────────────────────────────────
+function TypingIndicator({ provider }: { provider: Provider | undefined }) {
+  const dot1 = useRef(new Animated.Value(0)).current;
+  const dot2 = useRef(new Animated.Value(0)).current;
+  const dot3 = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const makeBounce = (anim: Animated.Value, delay: number) =>
+      Animated.loop(
+        Animated.sequence([
+          Animated.delay(delay),
+          Animated.timing(anim, { toValue: -6, duration: 280, useNativeDriver: true }),
+          Animated.timing(anim, { toValue: 0, duration: 280, useNativeDriver: true }),
+          Animated.delay(400),
+        ])
+      );
+    const a1 = makeBounce(dot1, 0);
+    const a2 = makeBounce(dot2, 140);
+    const a3 = makeBounce(dot3, 280);
+    a1.start(); a2.start(); a3.start();
+    return () => { a1.stop(); a2.stop(); a3.stop(); };
+  }, [dot1, dot2, dot3]);
+
+  return (
+    <View style={{ alignSelf: 'flex-start', maxWidth: '86%' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#0D0D0D', borderWidth: 1, borderColor: 'rgba(245,208,66,0.25)', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#F5D042', fontSize: 9 }}>✦</Text>
+        </View>
+        <Text style={{ color: '#F5D042', fontSize: 11, fontWeight: '600' }}>{provider?.name ?? 'AI'}</Text>
+      </View>
+      <View style={{ backgroundColor: '#111111', borderRadius: 18, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, paddingVertical: 14 }}>
+        <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+          {[dot1, dot2, dot3].map((d, i) => (
+            <Animated.View key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#636363', transform: [{ translateY: d }] }} />
+          ))}
+        </View>
+      </View>
     </View>
   );
 }

@@ -28,6 +28,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
+    // SpaceMono kept for backward-compat but no longer actively used in UI
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
@@ -56,32 +57,20 @@ function RootLayoutNav() {
 
   const navigationTheme = useMemo<Theme>(
     () => ({
-      dark: false,
+      dark: true,
       colors: {
         primary: palette.primary,
         background: palette.background,
-        card: palette.surface,
+        card: '#0D0D0D',
         text: palette.textPrimary,
         border: palette.border,
-        notification: palette.secondary,
+        notification: palette.primary,
       },
       fonts: {
-        regular: {
-          fontFamily: 'SpaceMono',
-          fontWeight: '400',
-        },
-        medium: {
-          fontFamily: 'SpaceMono',
-          fontWeight: '400',
-        },
-        bold: {
-          fontFamily: 'SpaceMono',
-          fontWeight: '400',
-        },
-        heavy: {
-          fontFamily: 'SpaceMono',
-          fontWeight: '400',
-        },
+        regular: { fontFamily: 'System', fontWeight: '400' as const },
+        medium:  { fontFamily: 'System', fontWeight: '500' as const },
+        bold:    { fontFamily: 'System', fontWeight: '700' as const },
+        heavy:   { fontFamily: 'System', fontWeight: '900' as const },
       },
     }),
     [palette],
@@ -90,7 +79,7 @@ function RootLayoutNav() {
   return (
     <LocalizationProvider>
       <ThemeProvider value={navigationTheme}>
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
         <Stack
           screenOptions={{
             headerShown: false,

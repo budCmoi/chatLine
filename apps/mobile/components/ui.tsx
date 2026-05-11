@@ -1,3 +1,8 @@
+/**
+ * ui.tsx — Design system aligné sur apps/web
+ * Palette: #050505 noir / #F5D042 or / #F2F2F2 blanc cassé
+ * Typographie: system sans-serif (SF Pro / Roboto ≈ Inter)
+ */
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { BlurView } from 'expo-blur';
 import type { PropsWithChildren, ReactNode } from 'react';
@@ -7,11 +12,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useI18n } from '../lib/localization';
 import { useAppPalette } from '../lib/theme-palette';
 
+// ─── Types ───────────────────────────────────────────────────────────────────
 interface ScreenContainerProps extends PropsWithChildren {
   footer?: ReactNode;
   noPad?: boolean;
 }
-
 interface PageHeaderProps {
   eyebrow: string;
   title: string;
@@ -19,42 +24,37 @@ interface PageHeaderProps {
   onMenuPress?: () => void;
   rightSlot?: ReactNode;
 }
-
 interface SectionCardProps extends PropsWithChildren {
   title: string;
   subtitle: string;
 }
-
 interface PillButtonProps {
   label: string;
   active?: boolean;
   onPress?: () => void;
   disabled?: boolean;
 }
-
 interface PrimaryButtonProps {
   label: string;
   onPress?: () => void;
-  tone?: 'solid' | 'ghost' | 'violet';
+  /** solid = gold (défaut) · ghost = translucide · outline = bordure */
+  tone?: 'solid' | 'ghost' | 'outline' | 'violet';
   disabled?: boolean;
+  loading?: boolean;
   icon?: React.ComponentProps<typeof FontAwesome>['name'];
 }
-
 interface DataRowProps {
   label: string;
   value: string;
 }
-
 interface InputFieldProps extends TextInputProps {
   label?: string;
 }
-
 interface SettingToggleRowProps {
   label: string;
   value: boolean;
   onPress?: () => void;
 }
-
 interface StatusBadgeProps {
   label: string;
   tone?: 'primary' | 'secondary' | 'muted';
@@ -66,35 +66,25 @@ interface EmptyStateProps {
   action?: ReactNode;
 }
 
+// ─── ScreenContainer ─────────────────────────────────────────────────────────
 export function ScreenContainer({ children, footer, noPad }: ScreenContainerProps) {
   const palette = useAppPalette();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.background }}>
-      {/* Ambient glows – profondeur visuelle subtile */}
+      {/* Ambient gold glow — très subtil, identique au web */}
       <View
         pointerEvents="none"
         style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
         <View
           style={{
             position: 'absolute',
-            top: -80,
-            right: -80,
-            height: 300,
-            width: 300,
-            borderRadius: 999,
-            backgroundColor: palette.ambientSecondary,
-          }}
-        />
-        <View
-          style={{
-            position: 'absolute',
-            left: -100,
-            bottom: 60,
-            height: 340,
-            width: 340,
-            borderRadius: 999,
-            backgroundColor: palette.ambientPrimary,
+            top: -120,
+            alignSelf: 'center',
+            width: 360,
+            height: 240,
+            borderRadius: 180,
+            backgroundColor: 'rgba(245,208,66,0.05)',
           }}
         />
       </View>
@@ -122,13 +112,8 @@ export function ScreenContainer({ children, footer, noPad }: ScreenContainerProp
   );
 }
 
-export function PageHeader({
-  eyebrow,
-  title,
-  subtitle,
-  onMenuPress,
-  rightSlot,
-}: PageHeaderProps) {
+// ─── PageHeader ───────────────────────────────────────────────────────────────
+export function PageHeader({ eyebrow, title, subtitle, onMenuPress, rightSlot }: PageHeaderProps) {
   const palette = useAppPalette();
 
   return (
@@ -137,34 +122,13 @@ export function PageHeader({
         <View style={{ flex: 1, flexDirection: 'row', gap: 14 }}>
           {onMenuPress ? <MenuButton onPress={onMenuPress} /> : null}
           <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                color: palette.primary,
-                fontFamily: 'SpaceMono',
-                fontSize: 10,
-                letterSpacing: 2.5,
-              }}>
+            <Text style={{ color: palette.primary, fontSize: 10, fontWeight: '600', letterSpacing: 2.5 }}>
               {eyebrow}
             </Text>
-            <Text
-              style={{
-                marginTop: 10,
-                color: palette.textPrimary,
-                fontFamily: 'SpaceMono',
-                fontSize: 26,
-                lineHeight: 34,
-              }}>
+            <Text style={{ marginTop: 8, color: palette.textPrimary, fontSize: 26, fontWeight: '700', lineHeight: 34 }}>
               {title}
             </Text>
-            <Text
-              style={{
-                marginTop: 8,
-                maxWidth: 330,
-                color: palette.textSecondary,
-                fontFamily: 'SpaceMono',
-                fontSize: 12,
-                lineHeight: 20,
-              }}>
+            <Text style={{ marginTop: 6, maxWidth: 330, color: palette.textSecondary, fontSize: 13, lineHeight: 20 }}>
               {subtitle}
             </Text>
           </View>
@@ -175,6 +139,7 @@ export function PageHeader({
   );
 }
 
+// ─── SectionCard ─────────────────────────────────────────────────────────────
 export function SectionCard({ title, subtitle, children }: SectionCardProps) {
   const palette = useAppPalette();
 
@@ -182,27 +147,20 @@ export function SectionCard({ title, subtitle, children }: SectionCardProps) {
     <View
       style={{
         marginBottom: 14,
-        borderRadius: 24,
+        borderRadius: 20,
         borderWidth: 1,
         borderColor: palette.border,
-        backgroundColor: palette.surface,
+        backgroundColor: '#0D0D0D',
         padding: 16,
       }}>
-      <Text
-        style={{
-          color: palette.primary,
-          fontFamily: 'SpaceMono',
-          fontSize: 10,
-          letterSpacing: 2.5,
-        }}>
+      <Text style={{ color: palette.primary, fontSize: 10, fontWeight: '600', letterSpacing: 2 }}>
         {title}
       </Text>
       <Text
         style={{
           marginTop: 6,
           color: palette.textSecondary,
-          fontFamily: 'SpaceMono',
-          fontSize: 12,
+          fontSize: 13,
           lineHeight: 20,
         }}>
         {subtitle}
@@ -212,11 +170,12 @@ export function SectionCard({ title, subtitle, children }: SectionCardProps) {
   );
 }
 
+// ─── PillButton ───────────────────────────────────────────────────────────────
 export function PillButton({ label, active = false, onPress, disabled = false }: PillButtonProps) {
   const palette = useAppPalette();
   const scale = new Animated.Value(1);
-  const handleIn = () => Animated.timing(scale, { toValue: 0.93, duration: 100, useNativeDriver: true }).start();
-  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 120, useNativeDriver: true }).start();
+  const handleIn = () => Animated.timing(scale, { toValue: 0.95, duration: 100, useNativeDriver: true }).start();
+  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 130, useNativeDriver: true }).start();
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
@@ -226,21 +185,15 @@ export function PillButton({ label, active = false, onPress, disabled = false }:
         onPressOut={handleOut}
         disabled={disabled}
         style={{
-          borderRadius: 999,
+          borderRadius: 14,
           borderWidth: 1,
           borderColor: active ? palette.primary : palette.border,
-          backgroundColor: active ? palette.primary : palette.surfaceRaised,
+          backgroundColor: active ? 'rgba(245,208,66,0.12)' : palette.surfaceRaised,
           opacity: disabled ? 0.38 : 1,
           paddingHorizontal: 14,
-          paddingVertical: 10,
+          paddingVertical: 9,
         }}>
-        <Text
-          style={{
-            color: active ? palette.primaryText : palette.textSecondary,
-            fontFamily: 'SpaceMono',
-            fontSize: 11,
-            letterSpacing: 1.2,
-          }}>
+        <Text style={{ color: active ? palette.primary : palette.textSecondary, fontSize: 12, fontWeight: '600' }}>
           {label}
         </Text>
       </Pressable>
@@ -248,23 +201,21 @@ export function PillButton({ label, active = false, onPress, disabled = false }:
   );
 }
 
-export function PrimaryButton({
-  label,
-  onPress,
-  tone = 'solid',
-  disabled = false,
-  icon,
-}: PrimaryButtonProps) {
+// ─── PrimaryButton ────────────────────────────────────────────────────────────
+export function PrimaryButton({ label, onPress, tone = 'solid', disabled = false, loading = false, icon }: PrimaryButtonProps) {
   const palette = useAppPalette();
   const scale = new Animated.Value(1);
-  const handleIn = () => Animated.timing(scale, { toValue: 0.95, duration: 100, useNativeDriver: true }).start();
-  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 120, useNativeDriver: true }).start();
+  const handleIn = () => Animated.timing(scale, { toValue: 0.97, duration: 100, useNativeDriver: true }).start();
+  const handleOut = () => Animated.timing(scale, { toValue: 1.0, duration: 160, useNativeDriver: true }).start();
 
-  const isSolid = tone === 'solid';
-  const isViolet = tone === 'violet';
-  const bgColor = isSolid ? palette.primary : isViolet ? palette.secondary : palette.surfaceRaised;
-  const borderColor = isSolid ? palette.primary : isViolet ? palette.secondary : palette.border;
-  const textColor = isSolid ? palette.primaryText : isViolet ? '#FFFFFF' : palette.textPrimary;
+  const styleMap = {
+    solid:   { bg: palette.primary,               border: palette.primary,                     text: palette.primaryText },
+    ghost:   { bg: 'rgba(242,242,242,0.06)',       border: 'rgba(255,255,255,0.07)',             text: palette.textPrimary },
+    outline: { bg: 'transparent',                  border: 'rgba(255,255,255,0.10)',             text: palette.textSecondary },
+    violet:  { bg: palette.primary,               border: palette.primary,                     text: palette.primaryText },
+  } as const;
+
+  const s = styleMap[tone];
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
@@ -272,28 +223,20 @@ export function PrimaryButton({
         onPress={onPress}
         onPressIn={handleIn}
         onPressOut={handleOut}
-        disabled={disabled}
+        disabled={disabled || loading}
         style={{
-          minWidth: 116,
-          borderRadius: 999,
+          borderRadius: 14,
           borderWidth: 1,
-          borderColor,
-          backgroundColor: bgColor,
+          borderColor: s.border,
+          backgroundColor: s.bg,
           opacity: disabled ? 0.38 : 1,
-          paddingHorizontal: 20,
+          paddingHorizontal: 22,
           paddingVertical: 14,
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          {icon ? <FontAwesome name={icon} size={12} color={textColor} /> : null}
-          <Text
-            style={{
-              color: textColor,
-              textAlign: 'center',
-              fontFamily: 'SpaceMono',
-              fontSize: 11,
-              letterSpacing: 1.6,
-            }}>
-            {label}
+          {icon ? <FontAwesome name={icon} size={13} color={s.text} /> : null}
+          <Text style={{ color: s.text, fontSize: 14, fontWeight: '600', textAlign: 'center' }}>
+            {loading ? '…' : label}
           </Text>
         </View>
       </Pressable>
@@ -301,6 +244,7 @@ export function PrimaryButton({
   );
 }
 
+// ─── DataRow ─────────────────────────────────────────────────────────────────
 export function DataRow({ label, value }: DataRowProps) {
   const palette = useAppPalette();
 
@@ -314,58 +258,34 @@ export function DataRow({ label, value }: DataRowProps) {
         borderBottomColor: palette.border,
         paddingVertical: 12,
       }}>
-      <Text
-        style={{
-          color: palette.textMuted,
-          fontFamily: 'SpaceMono',
-          fontSize: 11,
-          letterSpacing: 1.2,
-        }}>
-        {label}
-      </Text>
-      <Text
-        style={{
-          color: palette.textPrimary,
-          fontFamily: 'SpaceMono',
-          fontSize: 12,
-        }}>
-        {value}
-      </Text>
+      <Text style={{ color: palette.textMuted, fontSize: 12 }}>{label}</Text>
+      <Text style={{ color: palette.textPrimary, fontSize: 13, fontWeight: '500' }}>{value}</Text>
     </View>
   );
 }
 
+// ─── InputField ───────────────────────────────────────────────────────────────
 export function InputField({ label, ...props }: InputFieldProps) {
   const palette = useAppPalette();
 
   return (
     <View>
       {label ? (
-        <Text
-          style={{
-            marginBottom: 8,
-            color: palette.textMuted,
-            fontFamily: 'SpaceMono',
-            fontSize: 11,
-            letterSpacing: 1.2,
-          }}>
-          {label}
-        </Text>
+        <Text style={{ marginBottom: 8, color: palette.textMuted, fontSize: 12 }}>{label}</Text>
       ) : null}
       <TextInput
         placeholderTextColor={palette.textMuted}
         {...props}
         style={[
           {
-            borderRadius: 22,
+            borderRadius: 14,
             borderWidth: 1,
             borderColor: palette.border,
-            backgroundColor: palette.surfaceRaised,
+            backgroundColor: '#0D0D0D',
             color: palette.textPrimary,
-            fontFamily: 'SpaceMono',
-            fontSize: 13,
-            paddingHorizontal: 14,
-            paddingVertical: 14,
+            fontSize: 14,
+            paddingHorizontal: 16,
+            paddingVertical: 13,
           },
           props.style,
         ]}
@@ -374,9 +294,9 @@ export function InputField({ label, ...props }: InputFieldProps) {
   );
 }
 
+// ─── SettingToggleRow ─────────────────────────────────────────────────────────
 export function SettingToggleRow({ label, value, onPress }: SettingToggleRowProps) {
   const palette = useAppPalette();
-  const { locale } = useI18n();
 
   return (
     <Pressable
@@ -389,112 +309,62 @@ export function SettingToggleRow({ label, value, onPress }: SettingToggleRowProp
         borderBottomColor: palette.border,
         paddingVertical: 14,
       }}>
-      <Text
-        style={{
-          color: palette.textPrimary,
-          fontFamily: 'SpaceMono',
-          fontSize: 12,
-        }}>
-        {label}
-      </Text>
+      <Text style={{ color: palette.textPrimary, fontSize: 13 }}>{label}</Text>
       <View
         style={{
-          borderRadius: 999,
+          borderRadius: 12,
           borderWidth: 1,
           borderColor: value ? palette.primary : palette.border,
-          backgroundColor: value ? palette.primary : palette.surfaceRaised,
+          backgroundColor: value ? 'rgba(245,208,66,0.12)' : palette.surfaceRaised,
           paddingHorizontal: 12,
-          paddingVertical: 8,
+          paddingVertical: 7,
         }}>
-        <Text
-          style={{
-            color: value ? palette.primaryText : palette.textSecondary,
-            fontFamily: 'SpaceMono',
-            fontSize: 10,
-            letterSpacing: 1.2,
-          }}>
-          {value ? (locale === 'fr' ? 'ON' : 'ON') : locale === 'fr' ? 'OFF' : 'OFF'}
+        <Text style={{ color: value ? palette.primary : palette.textSecondary, fontSize: 11, fontWeight: '600' }}>
+          {value ? 'ON' : 'OFF'}
         </Text>
       </View>
     </Pressable>
   );
 }
 
+// ─── StatusBadge ─────────────────────────────────────────────────────────────
 export function StatusBadge({ label, tone = 'primary' }: StatusBadgeProps) {
   const palette = useAppPalette();
 
-  const backgroundColor =
-    tone === 'primary' ? palette.primary : tone === 'secondary' ? palette.secondarySoft : palette.surfaceRaised;
-  const borderColor = tone === 'primary' ? palette.primary : tone === 'secondary' ? palette.secondary : palette.border;
-  const color = tone === 'primary' ? palette.primaryText : palette.textPrimary;
+  const map = {
+    primary:   { bg: 'rgba(245,208,66,0.12)', border: 'rgba(245,208,66,0.25)', text: palette.primary },
+    secondary: { bg: 'rgba(245,208,66,0.08)', border: 'rgba(245,208,66,0.18)', text: palette.primary },
+    muted:     { bg: palette.surfaceRaised,   border: palette.border,           text: palette.textMuted },
+  };
+  const s = map[tone];
 
   return (
-    <View
-      style={{
-        alignSelf: 'flex-start',
-        borderRadius: 999,
-        borderWidth: 1,
-        borderColor,
-        backgroundColor,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-      }}>
-      <Text
-        style={{
-          color,
-          fontFamily: 'SpaceMono',
-          fontSize: 10,
-          letterSpacing: 1.2,
-        }}>
-        {label.toUpperCase()}
-      </Text>
+    <View style={{ alignSelf: 'flex-start', borderRadius: 12, borderWidth: 1, borderColor: s.border, backgroundColor: s.bg, paddingHorizontal: 11, paddingVertical: 6 }}>
+      <Text style={{ color: s.text, fontSize: 11, fontWeight: '600' }}>{label}</Text>
     </View>
   );
 }
 
+// ─── EmptyState ───────────────────────────────────────────────────────────────
 export function EmptyState({ title, body, action }: EmptyStateProps) {
   const palette = useAppPalette();
 
   return (
-    <View
-      style={{
-        marginTop: 10,
-        borderRadius: 28,
-        borderWidth: 1,
-        borderColor: palette.border,
-        backgroundColor: palette.surface,
-        padding: 18,
-      }}>
-      <Text
-        style={{
-          color: palette.textPrimary,
-          fontFamily: 'SpaceMono',
-          fontSize: 16,
-          lineHeight: 24,
-        }}>
-        {title}
-      </Text>
-      <Text
-        style={{
-          marginTop: 8,
-          color: palette.textSecondary,
-          fontFamily: 'SpaceMono',
-          fontSize: 13,
-          lineHeight: 22,
-        }}>
-        {body}
-      </Text>
+    <View style={{ marginTop: 10, borderRadius: 20, borderWidth: 1, borderColor: palette.border, backgroundColor: '#0D0D0D', padding: 20 }}>
+      <Text style={{ color: palette.textPrimary, fontSize: 16, fontWeight: '600', lineHeight: 24 }}>{title}</Text>
+      <Text style={{ marginTop: 8, color: palette.textSecondary, fontSize: 13, lineHeight: 22 }}>{body}</Text>
       {action ? <View style={{ marginTop: 16 }}>{action}</View> : null}
     </View>
   );
 }
 
+// ─── MenuButton ───────────────────────────────────────────────────────────────
 function MenuButton({ onPress }: { onPress: () => void }) {
   const palette = useAppPalette();
   const { t } = useI18n();
   const scale = new Animated.Value(1);
   const handleIn = () => Animated.timing(scale, { toValue: 0.90, duration: 100, useNativeDriver: true }).start();
-  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 120, useNativeDriver: true }).start();
+  const handleOut = () => Animated.timing(scale, { toValue: 1, duration: 130, useNativeDriver: true }).start();
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
@@ -505,16 +375,16 @@ function MenuButton({ onPress }: { onPress: () => void }) {
         onPressOut={handleOut}
         style={{
           marginTop: 2,
-          height: 42,
-          width: 42,
+          height: 40,
+          width: 40,
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: 14,
+          borderRadius: 12,
           borderWidth: 1,
           borderColor: palette.border,
           backgroundColor: palette.surfaceRaised,
         }}>
-        <FontAwesome name="bars" size={14} color={palette.textPrimary} />
+        <FontAwesome name="bars" size={13} color={palette.textSecondary} />
       </Pressable>
     </Animated.View>
   );

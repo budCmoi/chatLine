@@ -48,15 +48,14 @@ export default function ArchivedScreen() {
                     backgroundColor: palette.surfaceRaised,
                     padding: 14,
                   }}>
-                  <Text style={{ color: palette.textPrimary, fontFamily: 'SpaceMono', fontSize: 13 }}>
+                  <Text style={{ color: palette.textPrimary, fontSize: 13, fontWeight: '500' }}>
                     {conversation.title}
                   </Text>
                   <Text
                     style={{
                       marginTop: 8,
                       color: palette.textSecondary,
-                      fontFamily: 'SpaceMono',
-                      fontSize: 12,
+                      fontSize: 13,
                       lineHeight: 20,
                     }}>
                     {conversation.preview}
@@ -65,9 +64,7 @@ export default function ArchivedScreen() {
                     style={{
                       marginTop: 8,
                       color: palette.textMuted,
-                      fontFamily: 'SpaceMono',
-                      fontSize: 10,
-                      letterSpacing: 1.2,
+                      fontSize: 11,
                     }}>
                     {formatConversationDate(locale, conversation.updatedAt)}
                   </Text>
