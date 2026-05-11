@@ -12,6 +12,9 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const toggleSidebar = useChatStore((s) => s.toggleSidebar);
+  const toggleRightSidebar = useChatStore((s) => s.toggleRightSidebar);
+  const setVoiceModeOpen = useChatStore((s) => s.setVoiceModeOpen);
+  const toggleVoice = () => setVoiceModeOpen(true);
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -47,9 +50,22 @@ export default function Navbar() {
               <PlusIcon />
               <span className="hidden lg:inline">Nouveau chat</span>
             </button>
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center cursor-pointer hover:bg-gold/15 transition-colors active:scale-95">
+            {/* Voice button */}
+            <button
+              onClick={() => toggleVoice()}
+              className="w-7 h-7 flex items-center justify-center rounded-xl text-snow/30 hover:text-snow/70 hover:bg-snow/[0.06] border border-transparent hover:border-rim transition-all duration-200 active:scale-95"
+              aria-label="Mode voix"
+            >
+              <MicIcon />
+            </button>
+            {/* Profile avatar → opens right sidebar */}
+            <button
+              onClick={toggleRightSidebar}
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center cursor-pointer hover:bg-gold/15 transition-colors active:scale-95"
+              aria-label="Mon compte"
+            >
               <span className="text-gold text-xs font-bold">A</span>
-            </div>
+            </button>
           </div>
         </nav>
       </header>
@@ -100,4 +116,7 @@ function HistoryIcon() {
 }
 function StarTabIcon() {
   return <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 4.2L15 7.5l-3 3 .7 4.3L9 12.6 5.3 14.8l.7-4.3-3-3 4.2-1.3L9 2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/></svg>;
+}
+function MicIcon() {
+  return <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4.5" y="1" width="5" height="8" rx="2.5" stroke="currentColor" strokeWidth="1.3"/><path d="M2.5 7a4.5 4.5 0 009 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/><path d="M7 11.5V13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>;
 }

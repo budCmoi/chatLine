@@ -130,9 +130,9 @@ export default function ChatUI({ conversationId }: ChatUIProps) {
   }
 
   return (
-    <div ref={containerRef} className="flex flex-col h-screen pt-16 sm:pt-20">
-      {/* Messages area — pb accounts for bottom tab bar on mobile */}
-      <div className="flex-1 overflow-y-auto py-4 sm:py-6 space-y-4 sm:space-y-5 pb-16 md:pb-0">
+    <div ref={containerRef} className="flex flex-col h-screen pt-20">
+      {/* Messages area */}
+      <div className="flex-1 overflow-y-auto py-6 space-y-5">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-snow/20 text-sm">Envoyez un message pour démarrer</p>

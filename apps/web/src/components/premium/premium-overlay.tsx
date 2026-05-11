@@ -106,7 +106,7 @@ export default function PremiumOverlay() {
           size="lg"
           className="relative w-full"
         >
-          Passer à Premium
+          Passer à Premium — 8,99€/mois
         </Button>
 
         <button

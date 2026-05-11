@@ -79,13 +79,13 @@ export default function PricingCard({ plan, delay = 0 }: PricingCardProps) {
         </p>
         <div className="flex items-baseline gap-1">
           <span className="font-display font-bold text-4xl text-snow">
-            {isPremium ? '19' : '0'}
+            {isPremium ? '8,99' : '0'}
           </span>
           <span className="text-snow/40 text-sm">€ / mois</span>
         </div>
         {isPremium && (
           <p className="text-xs text-snow/35 mt-1.5">
-            ou <span className="text-gold/60">190€ / an</span>{' '}
+            ou <span className="text-gold/60">89,99€ / an</span>{' '}
             <span className="text-snow/25">— économisez 2 mois</span>
           </p>
         )}
@@ -132,7 +132,7 @@ export default function PricingCard({ plan, delay = 0 }: PricingCardProps) {
       <div className="relative">
         {isPremium ? (
           <Button size="lg" className="w-full">
-            Commencer — 19€ / mois
+            Commencer — 8,99€ / mois
           </Button>
         ) : (
           <Button variant="outline" size="lg" className="w-full">

@@ -57,26 +57,13 @@ export default function PromptCard({
     });
   };
 
-  const handleTouchStart = () => {
-    if (!cardRef.current) return;
-    gsap.to(cardRef.current, { scale: 0.97, duration: 0.12, ease: 'power2.out' });
-  };
-
-  const handleTouchEnd = () => {
-    if (!cardRef.current) return;
-    gsap.to(cardRef.current, { scale: 1, duration: 0.2, ease: 'power2.out' });
-  };
-
   return (
     <button
       ref={cardRef}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchEnd}
-      className="group relative text-left p-4 sm:p-4.5 rounded-2xl border border-rim bg-ink-surface hover:border-gold/20 transition-colors duration-200 cursor-pointer"
+      className="group relative text-left p-4 rounded-2xl border border-rim bg-ink-surface hover:border-gold/20 transition-colors duration-200 cursor-pointer"
       style={{ willChange: 'transform, opacity' }}
     >
       {/* Glow on hover */}
