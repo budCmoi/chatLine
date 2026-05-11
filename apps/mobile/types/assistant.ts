@@ -59,4 +59,5 @@ export interface ChatRequestInput {
 export interface ChatReply {
   content: string;
   providerLabel: string;
+  providerId?: string;
 }

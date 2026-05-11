@@ -50,24 +50,17 @@ interface AssistantState {
 
 const providers: Provider[] = [
   {
-    id: 'llama-3-free',
-    name: 'Llama 3.1',
-    vendor: 'Meta',
-    summary: 'Open, versatile and good for daily conversations',
+    id: 'openai-gpt',
+    name: 'GPT-4.1',
+    vendor: 'OpenAI',
+    summary: 'Chat, reasoning and structured outputs',
     free: true,
   },
   {
-    id: 'mistral-small',
-    name: 'Mistral Small',
-    vendor: 'Mistral',
-    summary: 'Compact reasoning with a fast response profile',
-    free: true,
-  },
-  {
-    id: 'gemma-2',
-    name: 'Gemma 2',
-    vendor: 'Google',
-    summary: 'Lightweight model for short answers and ideation',
+    id: 'anthropic-claude',
+    name: 'Claude 3.7',
+    vendor: 'Anthropic',
+    summary: 'Long context, analysis and writing depth',
     free: true,
   },
 ];
@@ -108,7 +101,7 @@ const messagesSeed: Record<string, ChatMessage[]> = {
     {
       id: 'msg-launch-1',
       role: 'assistant',
-      providerId: 'llama-3-free',
+      providerId: 'openai-gpt',
       content: 'Chatline est pret. On peut clarifier le plan de lancement, le parcours freemium et la navigation principale.',
       createdAt: minutesAgo(21),
     },
@@ -121,7 +114,7 @@ const messagesSeed: Record<string, ChatMessage[]> = {
     {
       id: 'msg-launch-3',
       role: 'assistant',
-      providerId: 'mistral-small',
+      providerId: 'anthropic-claude',
       content: 'Je propose une navigation par drawer, une page profil riche, un plan freemium lisible et une page premium dediee.',
       createdAt: minutesAgo(18),
     },
@@ -136,7 +129,7 @@ const messagesSeed: Record<string, ChatMessage[]> = {
     {
       id: 'msg-growth-2',
       role: 'assistant',
-      providerId: 'gemma-2',
+      providerId: 'anthropic-claude',
       content: 'Un quota gratuit simple, un mode expert reserve au premium et un CTA discret au bon moment suffisent pour le MVP.',
       createdAt: minutesAgo(180),
     },
@@ -145,7 +138,7 @@ const messagesSeed: Record<string, ChatMessage[]> = {
     {
       id: 'msg-ux-1',
       role: 'assistant',
-      providerId: 'llama-3-free',
+      providerId: 'openai-gpt',
       content: 'Le point prioritaire: sortir les conversations de l accueil et les regrouper dans une sidebar claire.',
       createdAt: minutesAgo(620),
     },
@@ -154,7 +147,7 @@ const messagesSeed: Record<string, ChatMessage[]> = {
     {
       id: 'msg-archive-1',
       role: 'assistant',
-      providerId: 'gemma-2',
+      providerId: 'openai-gpt',
       content: 'Conversation archivee conservee pour reference.',
       createdAt: minutesAgo(1900),
     },
@@ -200,7 +193,7 @@ const sessionSeed: SessionDevice[] = [
 
 export const useAssistantStore = create<AssistantState>((set, get) => ({
   activeConversationId: null,
-  selectedProviderId: 'llama-3-free',
+  selectedProviderId: 'openai-gpt',
   mode: 'fast',
   draft: '',
   isSending: false,
@@ -348,7 +341,7 @@ export const useAssistantStore = create<AssistantState>((set, get) => ({
         id: createMessageId(),
         role: 'assistant',
         content: reply.content,
-        providerId: state.selectedProviderId,
+        providerId: reply.providerId ?? state.selectedProviderId,
         createdAt: responseCreatedAt,
       };
 
@@ -377,7 +370,7 @@ export const useAssistantStore = create<AssistantState>((set, get) => ({
       const assistantMessage: ChatMessage = {
         id: createMessageId(),
         role: 'assistant',
-        content: 'SYSTEM>Fallback active. Chatline keeps working locally while the API is unavailable.',
+        content: 'Je n ai pas reussi a joindre le serveur pour cette demande. Reessaie dans un instant.',
         providerId: state.selectedProviderId,
         createdAt: responseCreatedAt,
       };

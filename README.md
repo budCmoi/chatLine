@@ -26,6 +26,13 @@ ChatLine is a monochrome multi-IA mobile MVP with an Expo client and a NestJS AP
 - apps/mobile/.env.example
 - apps/api/.env.example
 
+For live chat replies, set at least one provider key in apps/api/.env:
+
+- OPENAI_API_KEY for GPT-4.1 replies
+- ANTHROPIC_API_KEY for Claude 3.7 replies
+
+If no live provider key is configured, ChatLine falls back to a local conversational reply instead of routing/debug placeholder text.
+
 ## API routes
 
 - GET /api/health

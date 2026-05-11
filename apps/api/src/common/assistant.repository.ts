@@ -91,7 +91,7 @@ export class AssistantRepository {
           role: 'assistant',
           providerId: 'openai-gpt',
           content:
-            'SYSTEM ONLINE. Multi-IA routing, context memory and generation modules are ready.',
+            'Je suis pret a t aider sur le lancement du produit, le freemium et la structure generale de l app.',
           timestamp: '2026-05-04T09:32:00.000Z',
         },
         {
@@ -105,7 +105,7 @@ export class AssistantRepository {
           role: 'assistant',
           providerId: 'anthropic-claude',
           content:
-            'ROUTING>Claude 3.7\nFOCUS>MVP, premium UX, performance and staged rollout.\nNEXT>Define product pillars, screens, provider orchestration and measurable releases.',
+            'Pour un MVP solide, je commencerais par trois blocs: un chat central, un historique clair et une offre premium simple a comprendre.',
           timestamp: '2026-05-04T09:34:00.000Z',
         },
       ],

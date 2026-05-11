@@ -239,7 +239,7 @@ export default function ChatScreen() {
           <FadeInView delay={120}>
             <View style={{ gap: 12 }}>
               {messages.map((message) => (
-                <MessageBubble key={message.id} message={message} provider={selectedProvider} locale={locale} />
+                <MessageBubble key={message.id} message={message} providers={providers} locale={locale} />
               ))}
 
               {isSending ? (
@@ -291,15 +291,16 @@ export default function ChatScreen() {
 
 function MessageBubble({
   message,
-  provider,
+  providers,
   locale,
 }: {
   message: ChatMessage;
-  provider?: Provider;
+  providers: Provider[];
   locale: 'en' | 'fr';
 }) {
   const palette = useAppPalette();
   const isUser = message.role === 'user';
+  const provider = providers.find((item) => item.id === message.providerId);
 
   return (
     <View
